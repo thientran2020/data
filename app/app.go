@@ -4,17 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/thientran2020/financial-cli/models"
 )
 
 func AppInit() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-	addIncome := addCmd.Bool("income", false, "Flag to add income data - False by default")
 
 	showCmd := flag.NewFlagSet("show", flag.ExitOnError)
-	showMonth := showCmd.Int("m", -1, "Flag | Specify month you want to retrive financial data | Ex: Jan, Feb, Mar,....")
+	showMonth := showCmd.Int("m", -1, "Flag | Specify month you want to retrive financial data")
 	showYear := showCmd.Int("y", -1, "Flag | Specify year you want to retrive financial data")
 
 	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
+
+	ctgCmd := flag.NewFlagSet("category", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		fmt.Println("Expected at least 1 subcommand")
@@ -23,14 +26,14 @@ func AppInit() {
 
 	switch os.Args[1] {
 	case "add":
-		HandleAdd(addCmd, addIncome)
+		HandleAdd(addCmd)
 	case "show":
 		HandleShow(showCmd, showMonth, showYear)
 	case "help":
 		HandleHelp(helpCmd)
+	case "category":
+		HandleCategory(ctgCmd)
 	default:
-		fmt.Println("Invalid command...!")
-		// TODO
-		// Print general instruction for financial cli tool
+		fmt.Print(models.INSTRUCTION)
 	}
 }

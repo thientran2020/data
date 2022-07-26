@@ -1,18 +1,25 @@
 package models
 
+import "time"
+
 type Record struct {
-	Year         int16
-	Month        int16
-	Day          int16
-	Description  string
-	Code         int16
-	Cost         int32
-	Category     string
-	Subscription *Subscription
+	Year        int
+	Month       int
+	Day         int
+	Description string
+	Cost        int
+	Category    string
+	Code        int
 }
 
 type Subscription struct {
-	Name         string `default:"none"`
-	BillingCycle string `default:"none"`
-	Details      string `default:""`
+	Name         string
+	StartDate    time.Time
+	BillingCycle string
+	Note         string `default:"---"`
+}
+
+type MySubscriptionList struct {
+	NSub int
+	LSub []Subscription
 }
