@@ -59,7 +59,7 @@ func ConfirmYesNoPromt(label string) bool {
 	return err == nil
 }
 
-func MultiSelect(label string, items []string) (string, error) {
+func InteractiveSelect(label string, items []string) (string, error) {
 	prompt := promptui.Select{
 		Label:  label,
 		Items:  items,
@@ -100,9 +100,9 @@ func NumberEnter(label string) (int64, error) {
 	return result, nil
 }
 
-func PromptEnter(label string) (string, error) {
+func PromptEnter(label string, empty bool) (string, error) {
 	validate := func(input string) error {
-		if len(input) == 0 {
+		if len(input) == 0 && !empty {
 			return errors.New("Invalid input")
 		}
 		return nil

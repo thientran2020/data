@@ -2,7 +2,9 @@ package app
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 
@@ -21,7 +23,7 @@ func fileExists(filepath string) bool {
 	return !file.IsDir()
 }
 
-func csvCreate(filepath string) bool {
+func createFile(filepath string) bool {
 	file, err := os.Create(filepath)
 	if err != nil {
 		fmt.Printf("Cannot create new file at %s\n", filepath)
@@ -52,4 +54,23 @@ func csvWrite(filepath string, record models.Record) bool {
 	writer.Write(recordString)
 	writer.Flush()
 	return true
+}
+
+func readJson(filepath string) models.MySubscriptionList {
+	file, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		fmt.Printf("Error reading subscription file %v\n", err)
+	}
+	result := models.MySubscriptionList{}
+
+	_ = json.Unmarshal([]byte(file), &result)
+	return result
+}
+
+func writeJson(filepath string, subscriptionList models.MySubscriptionList) {
+	file, _ := json.MarshalIndent(subscriptionList, "", " ")
+	err := ioutil.WriteFile(filepath, file, 0644)
+	if err != nil {
+		fmt.Printf("Error writing subscription data %v\n", err)
+	}
 }

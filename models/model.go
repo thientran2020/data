@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type Record struct {
 	Year        int
 	Month       int
@@ -13,13 +11,14 @@ type Record struct {
 }
 
 type Subscription struct {
-	Name         string
-	StartDate    time.Time
-	BillingCycle string
-	Note         string `default:"---"`
+	Name         string `json:"name"`
+	Details      string `json:"details"`
+	Cost         int    `json:"cost"`
+	BillingCycle string `json:"billingCycle"`
+	StartDate    string `json:"startDate"`
 }
 
 type MySubscriptionList struct {
-	NSub int
-	LSub []Subscription
+	Monthly []Subscription `json:"monthly"`
+	Yearly  []Subscription `json:"yearly"`
 }
