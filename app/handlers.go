@@ -27,7 +27,6 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 
 	// Get current date
-
 	year, month, day := time.Now().Date()
 
 	// Create filepath for all-in-one file and current year file
@@ -44,20 +43,20 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 
 	// Prompt to input data
 	// 1. Check data entered is for expense or income
+	// 2. Prompt enter description
+	// 3. Get $$$ spent
+	// 4. Choose category
+	// 5. Convert category to code
 	ftype, _ := utils.InteractiveSelect(
 		"What type of financial data are you entering",
 		[]string{"Income", "Expense"},
 	)
-	// 2. Prompt enter description
 	description, _ := utils.PromptEnter(models.LABELS[ftype]["Description"], false)
-	// 3. Get $$$ spent
 	cost, _ := utils.NumberEnter(models.LABELS[ftype]["Cost"])
-	// 4. Choose category
 	category, _ := utils.InteractiveSelect(
 		"Pick the category that describe best your entered data",
 		models.CATEGORY,
 	)
-	// 5. Convert category to code
 	var code int
 	for index := range models.CATEGORY {
 		if models.CATEGORY[index] == category {
@@ -65,6 +64,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 		}
 	}
 
+	// Create record and ask for confirmation before adding
 	record := models.Record{
 		Year:        year,
 		Month:       int(month),
@@ -138,9 +138,6 @@ func HandleCategory(ctgCmd *flag.FlagSet) {
 
 func AddSubscription() {
 	filepath := "./finance/subscription.json"
-	// if !fileExists(filepath) {
-	// 	createFile(filepath)
-	// }
 	subscriptionList := readJson(filepath)
 
 	// Prompt user to enter neccessary information
