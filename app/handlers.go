@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -36,7 +35,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 		createFile(filepathCommon)
 	}
 
-	filepathCurrentYear := "./finance/finance-" + strconv.Itoa(year) + ".csv"
+	filepathCurrentYear := fmt.Sprintf("./finance/finance-%d.csv", year)
 	if !fileExists(filepathCurrentYear) {
 		createFile(filepathCurrentYear)
 	}
@@ -167,7 +166,7 @@ func AddSubscription() {
 	}
 
 	// Print new subscription and ask for confirmation before adding
-	message := name + ": $" + strconv.Itoa(int(cost)) + "/" + strings.ToLower(billingCycle[:len(billingCycle)-2])
+	message := fmt.Sprintf("%s: $%d/%s", name, cost, strings.ToLower(billingCycle[:len(billingCycle)-2]))
 	utils.PrintCustomizedMessage(message, utils.BGreen, true)
 	confirmed := utils.ConfirmYesNoPromt("Do you confirm to enter above subscription")
 	if confirmed {

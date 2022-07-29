@@ -10,7 +10,7 @@ import (
 
 func AppInit() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-	addSubscription := addCmd.Bool("sub", false, "Specify when adding subscription/membership data")
+	addSubscription := addCmd.Bool("s", false, "Specify when adding subscription/membership data")
 
 	showCmd := flag.NewFlagSet("show", flag.ExitOnError)
 	showMonth := showCmd.Int("m", -1, "Flag | Specify month you want to retrive financial data")

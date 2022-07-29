@@ -35,7 +35,9 @@ const (
 
 COMMANDS
 	- data add
-	USAGE: add financial data (expense or income) 
+	USAGE: add financial data (expense or income)
+	FLAGS:
+		-s: Specify this is a subscription data which will be handled automatically by billing cycle
 
 	- data show
 	USAGE: display financial data in table format - current date by default 
