@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/alexeyco/simpletable"
 	"github.com/manifoldco/promptui"
 	"github.com/thientran2020/financial-cli/models"
 )
@@ -50,6 +51,7 @@ const (
 	CheckMark             = "\u2713"
 )
 
+// Different Input Types
 func ConfirmYesNoPromt(label string) bool {
 	prompt := promptui.Prompt{
 		Label:     label,
@@ -114,10 +116,10 @@ func PromptEnter(label string, empty bool) (string, error) {
 	}
 
 	result, err := prompt.Run()
-
 	return result, err
 }
 
+// Print customized messages with color
 func PrintCustomizedMessage(message string, color string, newline bool) {
 	message = strings.ReplaceAll(message, ColorOff, "")
 	if newline {
@@ -138,6 +140,7 @@ func PrintSingleRecord(record models.Record, color string) {
 	PrintCustomizedMessage(message, color, true)
 }
 
+// Helper to convert day/month to 2-digit format
 func getStringDate(number int) string {
 	if number < 10 {
 		return "0" + strconv.Itoa(number)
@@ -145,6 +148,33 @@ func getStringDate(number int) string {
 	return strconv.Itoa(number)
 }
 
+// Print customized table with given styles
+func PrintTable(data [][]interface{}, headers []string, style *simpletable.Style) {
+	table := simpletable.New()
+
+	for _, header := range headers {
+		headerCell := simpletable.Cell{Align: simpletable.AlignCenter, Text: header}
+		table.Header.Cells = append(table.Header.Cells, &headerCell)
+	}
+
+	for _, row := range data {
+		r := []*simpletable.Cell{}
+		for _, rowCell := range row {
+			var rc *simpletable.Cell
+			if _, ok := rowCell.(int); ok {
+				rc = &simpletable.Cell{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", rowCell)}
+			} else {
+				rc = &simpletable.Cell{Align: simpletable.AlignLeft, Text: fmt.Sprintf("%s", rowCell)}
+			}
+			r = append(r, rc)
+		}
+		table.Body.Cells = append(table.Body.Cells, r)
+	}
+	table.SetStyle(style)
+	table.Println()
+}
+
+// Resolve terminal's bell ring issue when moving between interactive select
 type BellSkipper struct{}
 
 func (bs *BellSkipper) Write(b []byte) (int, error) {
