@@ -11,10 +11,7 @@ import (
 	"github.com/thientran2020/financial-cli/models"
 )
 
-func retriveData(year, month int16) {
-
-}
-
+// file processing with os
 func fileExists(filepath string) bool {
 	file, err := os.Stat(filepath)
 	if os.IsNotExist(err) {
@@ -33,6 +30,7 @@ func createFile(filepath string) bool {
 	return true
 }
 
+// csv file processing
 func csvWrite(filepath string, record models.Record) bool {
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
@@ -56,6 +54,7 @@ func csvWrite(filepath string, record models.Record) bool {
 	return true
 }
 
+// json file processing
 func readJson(filepath string) models.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
