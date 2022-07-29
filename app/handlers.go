@@ -95,7 +95,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 }
 
-func HandleShow(showCmd *flag.FlagSet, month *int, year *int) {
+func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expense *bool) {
 	showCmd.Parse(os.Args[2:])
 
 	if showCmd.NArg() != 0 {
@@ -104,11 +104,19 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int) {
 	}
 
 	if *month == -1 {
-		// *month = int(time.Now().Month())
-		*month = 4
+		*month = int(time.Now().Month())
 	}
 	if *year == -1 {
 		*year = time.Now().Year()
+	}
+
+	var flag string
+	if *income == true && *expense == false {
+		flag = "income"
+	} else if *income == false && *expense == true {
+		flag = "expense"
+	} else {
+		flag = "all"
 	}
 
 	fmt.Printf("%s %d, %d\n\n",
@@ -117,9 +125,9 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int) {
 		*year,
 	)
 
-	data := csvRead(*year, *month)
+	data := csvRead(*year, *month, flag)
 	headers := []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
-	utils.PrintTable(data, headers, simpletable.StyleDefault)
+	utils.PrintTable(data, headers, flag, simpletable.StyleDefault)
 }
 
 func HandleHelp(helpCmd *flag.FlagSet) {

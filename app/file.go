@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/thientran2020/financial-cli/models"
 	"github.com/thientran2020/financial-cli/utils"
@@ -66,7 +67,7 @@ func csvWrite(filepath string, record models.Record) bool {
 	return true
 }
 
-func csvRead(requestedYear int, requestedMonth int) [][]interface{} {
+func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interface{} {
 	filepath := fmt.Sprintf("./finance/finance_%d.csv", requestedYear)
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -92,9 +93,25 @@ func csvRead(requestedYear int, requestedMonth int) [][]interface{} {
 		}
 
 		month, _ := strconv.Atoi(row[month])
-		if month != requestedMonth {
+		nextRow := month != requestedMonth
+
+		switch typeFlag {
+		case "income":
+			if strings.Trim(row[category], " ") != "Income" {
+				nextRow = true
+			}
+		case "expense":
+			if strings.Trim(row[category], " ") == "Income" {
+				nextRow = true
+			}
+		default:
+			nextRow = false
+		}
+
+		if nextRow {
 			continue
 		}
+
 		count++
 		cost, _ := strconv.Atoi(row[cost])
 
@@ -105,8 +122,8 @@ func csvRead(requestedYear int, requestedMonth int) [][]interface{} {
 				utils.GetStringDateFromString(row[day]),
 				utils.Colorize(row[year], utils.UGreen),
 			),
-			row[content],
-			row[category],
+			strings.Trim(row[content], " "),
+			strings.Trim(row[category], " "),
 			cost,
 		}
 		data = append(data, rowData)

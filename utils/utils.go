@@ -160,7 +160,7 @@ func Colorize(text string, color string) string {
 }
 
 // Print customized table with given styles
-func PrintTable(data [][]interface{}, headers []string, style *simpletable.Style) {
+func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *simpletable.Style) {
 	table := simpletable.New()
 
 	// Generate Table Header
@@ -197,24 +197,57 @@ func PrintTable(data [][]interface{}, headers []string, style *simpletable.Style
 	}
 
 	// Generate Table Footer
-	table.Footer = &simpletable.Footer{
-		Cells: []*simpletable.Cell{
-			{
-				Align: simpletable.AlignRight,
-				Span:  4,
-				Text: fmt.Sprintf("%s\n%s",
-					Colorize("T-INCOME", BYellow),
-					Colorize("T-EXPENSE", BRed)),
+	var footer *simpletable.Footer
+	switch typeFlag {
+	case "income":
+		footer = &simpletable.Footer{
+			Cells: []*simpletable.Cell{
+				{
+					Align: simpletable.AlignRight,
+					Span:  4,
+					Text:  fmt.Sprintf("%s", Colorize("TOTAL INCOME", BRed)),
+				},
+				{
+					Align: simpletable.AlignRight,
+					Text:  fmt.Sprintf("%s", Colorize(fmt.Sprintf("%d", totalIncome), BYellow)),
+				},
 			},
-			{
-				Align: simpletable.AlignRight,
-				Text: fmt.Sprintf("%s\n%s",
-					Colorize(fmt.Sprintf("%d", totalIncome), BYellow),
-					Colorize(fmt.Sprintf("%d", totalExpense), BWhite)),
+		}
+	case "expense":
+		footer = &simpletable.Footer{
+			Cells: []*simpletable.Cell{
+				{
+					Align: simpletable.AlignRight,
+					Span:  4,
+					Text:  fmt.Sprintf("%s", Colorize("TOTAL EXPENSE", BRed)),
+				},
+				{
+					Align: simpletable.AlignRight,
+					Text:  fmt.Sprintf("%s", Colorize(fmt.Sprintf("%d", totalExpense), BWhite)),
+				},
 			},
-		},
+		}
+	default:
+		footer = &simpletable.Footer{
+			Cells: []*simpletable.Cell{
+				{
+					Align: simpletable.AlignRight,
+					Span:  4,
+					Text: fmt.Sprintf("%s\n%s",
+						Colorize("T-INCOME", BYellow),
+						Colorize("T-EXPENSE", BRed)),
+				},
+				{
+					Align: simpletable.AlignRight,
+					Text: fmt.Sprintf("%s\n%s",
+						Colorize(fmt.Sprintf("%d", totalIncome), BYellow),
+						Colorize(fmt.Sprintf("%d", totalExpense), BWhite)),
+				},
+			},
+		}
 	}
 
+	table.Footer = footer
 	table.SetStyle(style)
 	table.Println()
 }
