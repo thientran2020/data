@@ -130,7 +130,7 @@ func PrintCustomizedMessage(message string, color string, newline bool) {
 }
 
 func PrintSingleRecord(record models.Record, color string) {
-	date := fmt.Sprintf("    %s/%s/%s   ", getStringDate(record.Month), getStringDate(record.Day), strconv.Itoa(record.Year))
+	date := fmt.Sprintf("    %s/%s/%s   ", GetStringDateFromNumber(record.Month), GetStringDateFromNumber(record.Day), strconv.Itoa(record.Year))
 	description := fmt.Sprintf(" %-35s", record.Description)
 	costString := fmt.Sprintf(" $%-6s", strconv.Itoa(record.Cost))
 	category := fmt.Sprintf(" %-18s", record.Category)
@@ -141,11 +141,18 @@ func PrintSingleRecord(record models.Record, color string) {
 }
 
 // Helper functions
-func getStringDate(number int) string {
+func GetStringDateFromNumber(number int) string {
 	if number < 10 {
 		return "0" + strconv.Itoa(number)
 	}
 	return strconv.Itoa(number)
+}
+
+func GetStringDateFromString(number string) string {
+	if len(number) < 2 {
+		return "0" + number
+	}
+	return number
 }
 
 func Colorize(text string, color string) string {
@@ -156,29 +163,64 @@ func Colorize(text string, color string) string {
 func PrintTable(data [][]interface{}, headers []string, style *simpletable.Style) {
 	table := simpletable.New()
 
+	// Generate Table Header
 	for _, header := range headers {
-		headerCell := simpletable.Cell{Align: simpletable.AlignCenter, Text: Colorize(header, BYellow)}
+		headerCell := simpletable.Cell{Align: simpletable.AlignCenter, Text: Colorize(header, BGreen)}
 		table.Header.Cells = append(table.Header.Cells, &headerCell)
 	}
 
+	// Generate Table Body
+	totalIncome := 0
+	totalExpense := 0
+	n := len(headers)
 	for _, rowData := range data {
 		row := []*simpletable.Cell{}
-		for _, rowCellData := range rowData {
+		isIncome := string(rowData[n-2].(string)) == "Income"
+		for idx, rowCellData := range rowData {
 			var rowCell *simpletable.Cell
 			if _, ok := rowCellData.(int); ok {
 				rowCell = &simpletable.Cell{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", rowCellData)}
 			} else {
 				rowCell = &simpletable.Cell{Align: simpletable.AlignLeft, Text: fmt.Sprintf("%s", rowCellData)}
 			}
+			if idx == n-1 {
+				if isIncome {
+					totalIncome += int(rowCellData.(int))
+					rowCell.Text = Colorize(rowCell.Text, BYellow)
+				} else {
+					totalExpense += int(rowCellData.(int))
+				}
+			}
 			row = append(row, rowCell)
 		}
 		table.Body.Cells = append(table.Body.Cells, row)
 	}
+
+	// Generate Table Footer
+	table.Footer = &simpletable.Footer{
+		Cells: []*simpletable.Cell{
+			{
+				Align: simpletable.AlignRight,
+				Span:  4,
+				Text: fmt.Sprintf("%s\n%s",
+					Colorize("T-INCOME", BYellow),
+					Colorize("T-EXPENSE", BRed)),
+			},
+			{
+				Align: simpletable.AlignRight,
+				Text: fmt.Sprintf("%s\n%s",
+					Colorize(fmt.Sprintf("%d", totalIncome), BYellow),
+					Colorize(fmt.Sprintf("%d", totalExpense), BWhite)),
+			},
+		},
+	}
+
 	table.SetStyle(style)
 	table.Println()
 }
 
 // Resolve terminal's bell ring issue when moving between interactive select
+// The following implementation followed from: https://github.com/manifoldco/promptui/issues/49
 type BellSkipper struct{}
 
 func (bs *BellSkipper) Write(b []byte) (int, error) {

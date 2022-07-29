@@ -4,11 +4,23 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"strconv"
 
 	"github.com/thientran2020/financial-cli/models"
+	"github.com/thientran2020/financial-cli/utils"
+)
+
+const (
+	year int = iota
+	month
+	day
+	content
+	cost
+	category
+	code
 )
 
 // file processing with os
@@ -52,6 +64,55 @@ func csvWrite(filepath string, record models.Record) bool {
 	writer.Write(recordString)
 	writer.Flush()
 	return true
+}
+
+func csvRead(requestedYear int, requestedMonth int) [][]interface{} {
+	filepath := fmt.Sprintf("./finance/finance_%d.csv", requestedYear)
+	file, err := os.Open(filepath)
+	if err != nil {
+		fmt.Printf("Error opening file %s", err)
+	}
+	reader := csv.NewReader(file)
+
+	// discard the header
+	_, err = reader.Read()
+	if err != nil {
+		fmt.Printf("Error reading file %s", err)
+	}
+
+	data := [][]interface{}{}
+	count := 0
+	for {
+		row, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Printf("Error reading file %s", err)
+		}
+
+		month, _ := strconv.Atoi(row[month])
+		if month != requestedMonth {
+			continue
+		}
+		count++
+		cost, _ := strconv.Atoi(row[cost])
+
+		rowData := []interface{}{
+			count,
+			fmt.Sprintf("%s-%s-%s",
+				utils.Colorize(utils.GetStringDateFromNumber(month), utils.Yellow),
+				utils.GetStringDateFromString(row[day]),
+				utils.Colorize(row[year], utils.UGreen),
+			),
+			row[content],
+			row[category],
+			cost,
+		}
+		data = append(data, rowData)
+	}
+
+	return data
 }
 
 // json file processing
