@@ -123,9 +123,9 @@ func PromptEnter(label string, empty bool) (string, error) {
 func PrintCustomizedMessage(message string, color string, newline bool) {
 	message = strings.ReplaceAll(message, ColorOff, "")
 	if newline {
-		fmt.Printf("%s%s\n", color, message)
+		fmt.Println(Colorize(message, color))
 	} else {
-		fmt.Printf("%s%s", color, message)
+		fmt.Print(Colorize(message, color))
 	}
 }
 
@@ -140,7 +140,7 @@ func PrintSingleRecord(record models.Record, color string) {
 	PrintCustomizedMessage(message, color, true)
 }
 
-// Helper to convert day/month to 2-digit format
+// Helper functions
 func getStringDate(number int) string {
 	if number < 10 {
 		return "0" + strconv.Itoa(number)
@@ -148,27 +148,31 @@ func getStringDate(number int) string {
 	return strconv.Itoa(number)
 }
 
+func Colorize(text string, color string) string {
+	return fmt.Sprintf("%s%s%s", color, text, ColorOff)
+}
+
 // Print customized table with given styles
 func PrintTable(data [][]interface{}, headers []string, style *simpletable.Style) {
 	table := simpletable.New()
 
 	for _, header := range headers {
-		headerCell := simpletable.Cell{Align: simpletable.AlignCenter, Text: header}
+		headerCell := simpletable.Cell{Align: simpletable.AlignCenter, Text: Colorize(header, BYellow)}
 		table.Header.Cells = append(table.Header.Cells, &headerCell)
 	}
 
-	for _, row := range data {
-		r := []*simpletable.Cell{}
-		for _, rowCell := range row {
-			var rc *simpletable.Cell
-			if _, ok := rowCell.(int); ok {
-				rc = &simpletable.Cell{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", rowCell)}
+	for _, rowData := range data {
+		row := []*simpletable.Cell{}
+		for _, rowCellData := range rowData {
+			var rowCell *simpletable.Cell
+			if _, ok := rowCellData.(int); ok {
+				rowCell = &simpletable.Cell{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", rowCellData)}
 			} else {
-				rc = &simpletable.Cell{Align: simpletable.AlignLeft, Text: fmt.Sprintf("%s", rowCell)}
+				rowCell = &simpletable.Cell{Align: simpletable.AlignLeft, Text: fmt.Sprintf("%s", rowCellData)}
 			}
-			r = append(r, rc)
+			row = append(row, rowCell)
 		}
-		table.Body.Cells = append(table.Body.Cells, r)
+		table.Body.Cells = append(table.Body.Cells, row)
 	}
 	table.SetStyle(style)
 	table.Println()
