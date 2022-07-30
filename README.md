@@ -7,8 +7,8 @@ go get -u "github.com/thientran2020/financial-cli/models"
 ```
 
 ## COMMANDS
-`data add` (used to add a single record: either income or expense)
-  + **-s** (optional): adding subscription
++ `data add` (used to add a single record: either income or expense) <br/>
+**-s** (optional):&emsp; adding subscription
 
 ```
 ➜ data add
@@ -33,11 +33,13 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Travel
     Personal
 ```
-`data show` (used to retrieve your financial data)
-  + **-m**: specify month
-  + **-y**: specify year
-  + **-i**: show only income data
-  + **-e**: show only expense data
+
++ `data show` (used to retrieve your financial data) <br/>
+**-m**:&emsp; specify month <br/>
+**-y**:&emsp; specify year <br/>
+**-i**:&emsp; show only income data <br/>
+**-e**:&emsp; show only expense data <br/>
+
 ```
 ➜ data show -m=7 -i
 SHOW FINANCIAL DATA FOR 7/2022:
@@ -51,7 +53,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 +---+------------+-------------+----------+------+
 ```
 
-`data category` (used to display a table of app categories)
++ `data category` (used to display a table of app categories) <br/>
 
 ```
 ➜ data category
@@ -84,10 +86,10 @@ SHOW FINANCIAL DATA FOR 7/2022:
 	|------|-----------------------------------------|
 ```
 
-`data search`
-  + **-k**: keyword to look up 
++ `data search` <br/>
+**-k**:&emsp; keyword to look up 
 
-`data help` (used to show general instruction)
++ `data help` (used to show general instruction) <br/>
 
 ## WHERE ARE DATA SAVED?
 
