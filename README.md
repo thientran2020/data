@@ -36,6 +36,16 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Merchandise
     Travel
     Personal
+    
+ ➜ data add -s
+Adding subscription....
+Subcription list was created at ./finance/subscription.json
+What is your new subscription/membership: Costco
+✔ Expense
+✔ Monthly
+How much per billing period: 70
+Costco: $70/month
+? Do you confirm to enter above subscription? [y/N]
 ```
 
 + `data show` (used to retrieve your financial data) <br/>
