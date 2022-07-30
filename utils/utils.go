@@ -134,9 +134,8 @@ func PrintSingleRecord(record models.Record, color string) {
 	description := fmt.Sprintf(" %-35s", record.Description)
 	costString := fmt.Sprintf(" $%-6s", strconv.Itoa(record.Cost))
 	category := fmt.Sprintf(" %-18s", record.Category)
-	dash := "|-----|-----|-----|------------------------------------|--------|-------------------|"
 
-	message := "\n" + dash + "\n" + fmt.Sprintf("|%s|%s|%s|%s|", date, description, costString, category) + "\n" + dash + "\n"
+	message := fmt.Sprintf("\n%s\n|%s|%s|%s|%s|\n%s\n", models.DASH, date, description, costString, category, models.DASH)
 	PrintCustomizedMessage(message, color, true)
 }
 
@@ -153,6 +152,10 @@ func GetStringDateFromString(number string) string {
 		return "0" + number
 	}
 	return number
+}
+
+func ContainString(s, ss string) bool {
+	return strings.Contains(strings.ToLower(s), strings.ToLower(ss))
 }
 
 func Colorize(text string, color string) string {
@@ -249,6 +252,7 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 
 	table.Footer = footer
 	table.SetStyle(style)
+	fmt.Println(Colorize(models.HEADER_LINE, BGreen))
 	table.Println()
 }
 

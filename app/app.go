@@ -17,6 +17,7 @@ func AppInit() {
 	showYear := showCmd.Int("y", -1, "Specify year you want to retrive financial data")
 	showIncome := showCmd.Bool("i", false, "Specify when you want to retrieve income data")
 	showExpense := showCmd.Bool("e", false, "Specify when you want to retrieve income data")
+	showKeyword := showCmd.String("k", "", "Specify keyword for filtering")
 
 	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
 
@@ -33,7 +34,7 @@ func AppInit() {
 	case "add":
 		HandleAdd(addCmd, addSubscription)
 	case "show":
-		HandleShow(showCmd, showMonth, showYear, showIncome, showExpense)
+		HandleShow(showCmd, showMonth, showYear, showIncome, showExpense, showKeyword)
 	case "help":
 		HandleHelp(helpCmd)
 	case "category":

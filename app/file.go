@@ -68,7 +68,7 @@ func csvWrite(filepath string, record models.Record) bool {
 	return true
 }
 
-func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interface{} {
+func csvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
 	filepath := strings.Replace(models.BASE_FILEPATH, "?????", "", -1)
 	if requestedYear >= 2017 && requestedYear <= time.Now().Year() {
 		filepath = strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", requestedYear), -1)
@@ -98,19 +98,13 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interfa
 		}
 
 		month, _ := strconv.Atoi(row[month])
-		nextRow := false
-		switch typeFlag {
-		case "income":
-			if strings.Trim(row[category], " ") != "Income" {
-				nextRow = true
-			}
-		case "expense":
-			if strings.Trim(row[category], " ") == "Income" {
-				nextRow = true
-			}
-		}
+		skipRowByRequestedMonth := requestedMonth != -1 && month != requestedMonth
+		skipRowByTypeFlag :=
+			(typeFlag == "income" && strings.Trim(row[category], " ") != "Income") ||
+				(typeFlag == "expense" && strings.Trim(row[category], " ") == "Income")
+		skipRowByKeyWord := !utils.ContainString(row[content], keyword) && !utils.ContainString(row[category], keyword)
 
-		if (requestedMonth != -1 && month != requestedMonth) || nextRow {
+		if skipRowByRequestedMonth || skipRowByTypeFlag || skipRowByKeyWord {
 			continue
 		}
 

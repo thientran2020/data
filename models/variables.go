@@ -1,35 +1,42 @@
 package models
 
-var LABELS = map[string]map[string]string{
-	"Expense": {
-		"Description": "What did you spend money for",
-		"Cost":        "Nice. How much did you spend",
-	},
-	"Income": {
-		"Description": "What did you work for today",
-		"Cost":        "Awesome. How much did you earn",
-	},
-}
+var (
+	HEADERS = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
 
-var CATEGORY = []string{
-	"Income",
-	"Rent",
-	"Utilities",
-	"Insurance",
-	"Vehicle Services",
-	"Fuel - Car Wash",
-	"Subcription",
-	"Restaurants",
-	"Amazon Shopping",
-	"Merchandise",
-	"Travel",
-	"Personal",
-}
+	LABELS = map[string]map[string]string{
+		"Expense": {
+			"Description": "What did you spend money for",
+			"Cost":        "Nice. How much did you spend",
+		},
+		"Income": {
+			"Description": "What did you work for today",
+			"Cost":        "Awesome. How much did you earn",
+		},
+	}
+
+	CATEGORY = []string{
+		"Income",
+		"Rent",
+		"Utilities",
+		"Insurance",
+		"Vehicle Services",
+		"Fuel - Car Wash",
+		"Subcription",
+		"Restaurants",
+		"Amazon Shopping",
+		"Merchandise",
+		"Travel",
+		"Personal",
+	}
+)
 
 const (
 	BASE_FILEPATH             = "./finance/finance?????.csv"
 	BASE_FILEPATH_SUBCRIPTION = "./finance/subscription.json"
-	INSTRUCTION               = `
+	HEADER_LINE               = "\n-------------------- YOUR FINANCIAL DATA --------------------\n"
+	DASH                      = "|-----|-----|-----|------------------------------------|--------|-------------------|"
+
+	INSTRUCTION = `
 ---------------------------------------------------------------------------------
 				FINANCIAL CLI
    		 A great tool helps you manage your financial data ^^

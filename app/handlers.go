@@ -91,10 +91,12 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 				true,
 			)
 		}
+	} else {
+		utils.PrintCustomizedMessage("Record ignored "+utils.CheckMark, utils.BRed, true)
 	}
 }
 
-func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expense *bool) {
+func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expense *bool, keyword *string) {
 	showCmd.Parse(os.Args[2:])
 
 	if showCmd.NArg() != 0 {
@@ -116,11 +118,8 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 		flag = "all"
 	}
 
-	fmt.Println(utils.Colorize("\n------------ YOUR FINANCIAL DATA ------------\n", utils.UWhite))
-
-	data := csvRead(*year, *month, flag)
-	headers := []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
-	utils.PrintTable(data, headers, flag, simpletable.StyleDefault)
+	data := csvRead(*year, *month, flag, *keyword)
+	utils.PrintTable(data, models.HEADERS, flag, simpletable.StyleDefault)
 }
 
 func HandleHelp(helpCmd *flag.FlagSet) {
@@ -148,15 +147,14 @@ func HandleCategory(ctgCmd *flag.FlagSet) {
 func HandleSearch(searchCmd *flag.FlagSet) {
 	searchCmd.Parse(os.Args[2:])
 
-	if searchCmd.NArg() == 0 {
+	if searchCmd.NArg() < 1 {
 		fmt.Println("Please specific keyword. Correct usage: 'data search keyword'")
 		return
-	} else if searchCmd.NArg() > 1 {
-		fmt.Println("Please specific exactly one argument. Correct usage: 'data search keyword'")
-		return
 	}
-	keyword := os.Args[2]
-	fmt.Println(keyword)
+
+	keyword := strings.Join(os.Args[2:], " ")
+	data := csvRead(-1, -1, "all", keyword)
+	utils.PrintTable(data, models.HEADERS, "all", simpletable.StyleDefault)
 }
 
 func AddSubscription() {
