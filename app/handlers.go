@@ -36,7 +36,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 		createFile(filepathCommon)
 	}
 
-	filepathCurrentYear := fmt.Sprintf("./finance/finance-%d.csv", year)
+	filepathCurrentYear := fmt.Sprintf("./finance/finance_%d.csv", year)
 	if !fileExists(filepathCurrentYear) {
 		createFile(filepathCurrentYear)
 	}
