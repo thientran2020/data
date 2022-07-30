@@ -49,10 +49,11 @@ Costco: $70/month
 ```
 
 + `data show` (used to retrieve your financial data) <br/>
-*-m*: &emsp;specify month <br/>
-*-y*: &emsp;&nbsp;specify year <br/>
 *-i*: &emsp;&nbsp;&nbsp;show only income data <br/>
 *-e*: &emsp;&nbsp;show only expense data <br/>
+*-m*: &emsp;show only data filtered by specified month <br/>
+*-y*: &emsp;&nbsp;show only data filtered by specified year <br/>
+*-k*: &emsp;&nbsp;show only data filtered by specified keyword <br/>
 
 ```
 ➜ data show -m=7 -i
@@ -100,8 +101,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 	|------|-----------------------------------------|
 ```
 
-+ `data search` <br/>
-*-k*:&emsp; keyword to look up 
++ `data search *agrs` (used to look up data for specific keyword) <br/>
 
 + `data help` (used to show general instruction) <br/>
 
@@ -109,7 +109,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 There are 2 types of csv files: <br/>
 - `./finance/finance.csv`: this holds all financial data. <br/>
 - `./finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
-- `./finance/subcriptions.json`: this holds all subcriptionb/membership data 
+- `./finance/subcriptions.json`: this holds all subscription/membership data .
 where all of these will be automatically updated based on their billing cycle.<br/>
  
 
