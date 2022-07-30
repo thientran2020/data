@@ -93,8 +93,7 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interfa
 		}
 
 		month, _ := strconv.Atoi(row[month])
-		nextRow := month != requestedMonth
-
+		nextRow := false
 		switch typeFlag {
 		case "income":
 			if strings.Trim(row[category], " ") != "Income" {
@@ -104,11 +103,9 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interfa
 			if strings.Trim(row[category], " ") == "Income" {
 				nextRow = true
 			}
-		default:
-			nextRow = false
 		}
 
-		if nextRow {
+		if month != requestedMonth || nextRow {
 			continue
 		}
 

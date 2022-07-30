@@ -7,7 +7,7 @@ A great tool helps you manage your financial data ^^
 ```
 git clone git@github.com:thientran2020/financial-cli.git
 cd financial-cli
-go run -o data main.go && export PATH=$(pwd):$PATH
+go build -o data main.go && export PATH=$(pwd):$PATH
 ```
 
 ### COMMANDS

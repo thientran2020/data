@@ -120,7 +120,7 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 	}
 
 	fmt.Printf("%s %d/%d: \n\n",
-		utils.Colorize("\nSHOW FINANCIAL DATA FOR", utils.BYellow),
+		utils.Colorize("\nSHOW FINANCIAL DATA FOR", utils.UWhite),
 		*month,
 		*year,
 	)
