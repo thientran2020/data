@@ -1,9 +1,13 @@
 ## FINANCIAL CLI
 
+A great tool helps you manage your financial data ^^
+
 ### INSTALLATION
 
 ```
-go get -u "github.com/thientran2020/financial-cli/models"
+git clone git@github.com:thientran2020/financial-cli.git
+cd financial-cli
+go run -o data && export PATH=$(pwd):$PATH
 ```
 
 ### COMMANDS
