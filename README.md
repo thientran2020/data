@@ -1,14 +1,14 @@
-### FINANCIAL CLI
+## FINANCIAL CLI
 
-## INSTALLATION
+### INSTALLATION
 
 ```
 go get -u "github.com/thientran2020/financial-cli/models"
 ```
 
-## COMMANDS
+### COMMANDS
 + `data add` (used to add a single record: either income or expense) <br/>
-**-s** (optional):&emsp; adding subscription
+*-s* (optional): &emsp;adding subscription
 
 ```
 ➜ data add
@@ -35,10 +35,10 @@ Use the arrow keys to navigate: ↓ ↑ → ←
 ```
 
 + `data show` (used to retrieve your financial data) <br/>
-**-m**:&emsp; specify month <br/>
-**-y**:&emsp; specify year <br/>
-**-i**:&emsp; show only income data <br/>
-**-e**:&emsp; show only expense data <br/>
+*-m*: &emsp;specify month <br/>
+*-y*: &emsp;&nbsp;specify year <br/>
+**-i*: &emsp;&nbsp;&nbsp;show only income data <br/>
+*-e*: &emsp;&nbsp;show only expense data <br/>
 
 ```
 ➜ data show -m=7 -i
@@ -87,14 +87,25 @@ SHOW FINANCIAL DATA FOR 7/2022:
 ```
 
 + `data search` <br/>
-**-k**:&emsp; keyword to look up 
+*-k*:&emsp; keyword to look up 
 
 + `data help` (used to show general instruction) <br/>
 
-## WHERE ARE DATA SAVED?
+### WHERE ARE DATA SAVED?
+There are 2 types of csv files: <br/>
+- `./finance/finance.csv`: this holds all financial data. <br/>
+- `./finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
+- `./finance/subcriptions.json`: this holds all subcriptionb/membership data 
+where all of these will be automatically updated based on their billing cycle.<br/>
+ 
 
+```
+➜ ls -l ./finance
+-rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance.csv
+-rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance_2022.csv
+```
+
+### COPYRIGHT
 ```
 Copyright (c) 2022 Thien Tran
 ```
-
-## COPYRIGHT
