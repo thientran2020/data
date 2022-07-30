@@ -22,6 +22,8 @@ func AppInit() {
 
 	ctgCmd := flag.NewFlagSet("category", flag.ExitOnError)
 
+	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
+
 	if len(os.Args) < 2 {
 		fmt.Println("Expected at least 1 subcommand")
 		os.Exit(1)
@@ -36,6 +38,8 @@ func AppInit() {
 		HandleHelp(helpCmd)
 	case "category":
 		HandleCategory(ctgCmd)
+	case "search":
+		HandleSearch(searchCmd)
 	default:
 		fmt.Print(models.INSTRUCTION)
 	}

@@ -148,6 +148,20 @@ func HandleCategory(ctgCmd *flag.FlagSet) {
 	fmt.Print(models.CATEGORY_TABLE)
 }
 
+func HandleSearch(searchCmd *flag.FlagSet) {
+	searchCmd.Parse(os.Args[2:])
+
+	if searchCmd.NArg() == 0 {
+		fmt.Println("Please specific keyword. Correct usage: 'data search keyword'")
+		return
+	} else if searchCmd.NArg() > 1 {
+		fmt.Println("Please specific exactly one argument. Correct usage: 'data search keyword'")
+		return
+	}
+	keyword := os.Args[2]
+	fmt.Println(keyword)
+}
+
 func AddSubscription() {
 	subscriptionList := readJson(models.BASE_FILEPATH_SUBCRIPTION)
 
