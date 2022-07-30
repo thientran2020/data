@@ -102,8 +102,9 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 		os.Exit(1)
 	}
 
-	if *year == -1 {
-		*year = time.Now().Year()
+	if *year != -1 && (*year < 2017 || *year > time.Now().Year()) {
+		fmt.Println(utils.Colorize("No data found for the requested year...!", utils.BRed))
+		return
 	}
 
 	var flag string
@@ -115,11 +116,7 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 		flag = "all"
 	}
 
-	fmt.Printf("%s %d/%d: \n\n",
-		utils.Colorize("\nSHOW FINANCIAL DATA FOR", utils.UWhite),
-		*month,
-		*year,
-	)
+	fmt.Println(utils.Colorize("\n------------ YOUR FINANCIAL DATA ------------\n", utils.UWhite))
 
 	data := csvRead(*year, *month, flag)
 	headers := []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}

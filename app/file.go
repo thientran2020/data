@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/thientran2020/financial-cli/models"
 	"github.com/thientran2020/financial-cli/utils"
@@ -68,7 +69,11 @@ func csvWrite(filepath string, record models.Record) bool {
 }
 
 func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interface{} {
-	filepath := strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", requestedYear), -1)
+	filepath := strings.Replace(models.BASE_FILEPATH, "?????", "", -1)
+	if requestedYear >= 2017 && requestedYear <= time.Now().Year() {
+		filepath = strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", requestedYear), -1)
+	}
+
 	file, err := os.Open(filepath)
 	if err != nil {
 		fmt.Printf("Error opening file %s", err)
