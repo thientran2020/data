@@ -105,7 +105,7 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interfa
 			}
 		}
 
-		if month != requestedMonth || nextRow {
+		if (requestedMonth != -1 && month != requestedMonth) || nextRow {
 			continue
 		}
 

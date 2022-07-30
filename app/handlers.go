@@ -102,9 +102,6 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 		os.Exit(1)
 	}
 
-	if *month == -1 {
-		*month = int(time.Now().Month())
-	}
 	if *year == -1 {
 		*year = time.Now().Year()
 	}
