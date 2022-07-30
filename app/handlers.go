@@ -74,7 +74,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 		Category:    category,
 		Code:        code,
 	}
-	utils.PrintSingleRecord(record, utils.BGreen)
+	utils.PrintSingleRecord(record, utils.BWhite)
 
 	confirmed := utils.ConfirmYesNoPromt("Do you confirm to enter above record")
 	if confirmed {
@@ -119,8 +119,8 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 		flag = "all"
 	}
 
-	fmt.Printf("%s %d, %d\n\n",
-		utils.Colorize("\nSHOW FINANCIAL DATA FOR", utils.URed),
+	fmt.Printf("%s %d/%d: \n\n",
+		utils.Colorize("\nSHOW FINANCIAL DATA FOR", utils.BYellow),
 		*month,
 		*year,
 	)
