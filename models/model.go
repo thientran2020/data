@@ -12,7 +12,7 @@ type Record struct {
 
 type Subscription struct {
 	Name         string `json:"name"`
-	Details      string `json:"details"`
+	Type         string `json:"type"`
 	Cost         int    `json:"cost"`
 	BillingCycle string `json:"billingCycle"`
 	StartDate    string `json:"startDate"`

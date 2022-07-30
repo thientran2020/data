@@ -27,7 +27,9 @@ var CATEGORY = []string{
 }
 
 const (
-	INSTRUCTION = `
+	BASE_FILEPATH             = "./finance/finance?????.csv"
+	BASE_FILEPATH_SUBCRIPTION = "./finance/subscription.json"
+	INSTRUCTION               = `
 ---------------------------------------------------------------------------------
 				FINANCIAL CLI
    		 A great tool helps you manage your financial data ^^

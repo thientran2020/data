@@ -21,7 +21,6 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 
 	if *sub == true {
-		fmt.Println("Adding subscription....")
 		AddSubscription()
 		return
 	}
@@ -31,12 +30,12 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 
 	// Create filepath for all-in-one file and current year file
 	// Check if file exists - if not create a new one
-	filepathCommon := "./finance/finance.csv"
+	filepathCommon := strings.Replace(models.BASE_FILEPATH, "?????", "", -1)
 	if !fileExists(filepathCommon) {
 		createFile(filepathCommon)
 	}
 
-	filepathCurrentYear := fmt.Sprintf("./finance/finance_%d.csv", year)
+	filepathCurrentYear := strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", year), -1)
 	if !fileExists(filepathCurrentYear) {
 		createFile(filepathCurrentYear)
 	}
@@ -153,32 +152,34 @@ func HandleCategory(ctgCmd *flag.FlagSet) {
 }
 
 func AddSubscription() {
-	filepath := "./finance/subscription.json"
-	subscriptionList := readJson(filepath)
+	subscriptionList := readJson(models.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
 	startDate := strings.Split(time.Now().String(), " ")[0]
 	name, _ := utils.PromptEnter("What is your new subscription/membership", false)
-	details, _ := utils.PromptEnter("Any detail you want to provide", true)
+	ftype, _ := utils.InteractiveSelect(
+		"What type of your subscription",
+		[]string{"income", "expense"},
+	)
 	billingCycle, _ := utils.InteractiveSelect(
 		"Choose your billing cycle",
-		[]string{"Monthly", "Yearly"},
+		[]string{"monthly", "yearly"},
 	)
 	cost, _ := utils.NumberEnter("How much per billing period")
 
 	// Create new subscription and add to existing list
 	subscription := models.Subscription{
 		Name:         name,
-		Details:      details,
+		Type:         ftype,
 		Cost:         int(cost),
 		BillingCycle: billingCycle,
 		StartDate:    startDate,
 	}
 
 	switch billingCycle {
-	case "Monthly":
+	case "monthly":
 		subscriptionList.Monthly = append(subscriptionList.Monthly, subscription)
-	case "Yearly":
+	case "yearly":
 		subscriptionList.Yearly = append(subscriptionList.Yearly, subscription)
 	}
 
@@ -187,8 +188,8 @@ func AddSubscription() {
 	utils.PrintCustomizedMessage(message, utils.BGreen, true)
 	confirmed := utils.ConfirmYesNoPromt("Do you confirm to enter above subscription")
 	if confirmed {
-		writeJson(filepath, subscriptionList)
-		utils.PrintCustomizedMessage("Successfully added at "+filepath, utils.BYellow, true)
+		writeJson(models.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
+		utils.PrintCustomizedMessage("Successfully added at "+models.BASE_FILEPATH_SUBCRIPTION, utils.BYellow, true)
 	} else {
 		utils.PrintCustomizedMessage("Subscription ignored "+utils.CheckMark, utils.BRed, true)
 	}

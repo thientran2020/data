@@ -68,7 +68,7 @@ func csvWrite(filepath string, record models.Record) bool {
 }
 
 func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interface{} {
-	filepath := fmt.Sprintf("./finance/finance_%d.csv", requestedYear)
+	filepath := strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", requestedYear), -1)
 	file, err := os.Open(filepath)
 	if err != nil {
 		fmt.Printf("Error opening file %s", err)
@@ -133,7 +133,9 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string) [][]interfa
 func readJson(filepath string) models.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		fmt.Printf("Error reading subscription file %v\n", err)
+		createFile(filepath)
+		fmt.Printf("Subcription list was created at %v\n", filepath)
+		return readJson(filepath)
 	}
 	result := models.MySubscriptionList{}
 
