@@ -1,13 +1,15 @@
 ### FINANCIAL CLI
 
 ## INSTALLATION
+
 ```
 go get -u "github.com/thientran2020/financial-cli/models"
 ```
 
 ## COMMANDS
-- data add (used to add a single record: either income or expense)
-  -s (optional): adding subscription
+`data add` (used to add a single record: either income or expense)
+  + **-s** (optional): adding subscription
+
 ```
 ➜ data add
 Use the arrow keys to navigate: ↓ ↑ → ←
@@ -31,11 +33,11 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Travel
     Personal
 ```
-- data show (used to retrieve your financial data)
-  -m: specify month
-  -y: specify year
-  -i: show only income data
-  -e: show only expense data
+`data show` (used to retrieve your financial data)
+  + **-m**: specify month
+  + **-y**: specify year
+  + **-i**: show only income data
+  + **-e**: show only expense data
 ```
 ➜ data show -m=7 -i
 SHOW FINANCIAL DATA FOR 7/2022:
@@ -49,7 +51,8 @@ SHOW FINANCIAL DATA FOR 7/2022:
 +---+------------+-------------+----------+------+
 ```
 
-- data category (used to display a table of app categories)
+`data category` (used to display a table of app categories)
+
 ```
 ➜ data category
 
@@ -81,14 +84,15 @@ SHOW FINANCIAL DATA FOR 7/2022:
 	|------|-----------------------------------------|
 ```
 
-- data search (in progress)
+`data search`
+  + **-k**: keyword to look up 
 
-- data help (used to show general instruction)
+`data help` (used to show general instruction)
 
-## USAGE
-What it offers?
-- Insert expense/income
-- Add/remove subcription (monthly/yearly)
-- Provide yearly reports in csv
+## WHERE ARE DATA SAVED?
+
+```
+Copyright (c) 2022 Thien Tran
+```
 
 ## COPYRIGHT
