@@ -41,7 +41,7 @@ Use the arrow keys to navigate: ↓ ↑ → ←
 + `data show` (used to retrieve your financial data) <br/>
 *-m*: &emsp;specify month <br/>
 *-y*: &emsp;&nbsp;specify year <br/>
-**-i*: &emsp;&nbsp;&nbsp;show only income data <br/>
+*-i*: &emsp;&nbsp;&nbsp;show only income data <br/>
 *-e*: &emsp;&nbsp;show only expense data <br/>
 
 ```
