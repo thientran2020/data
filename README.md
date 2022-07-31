@@ -12,7 +12,7 @@ go build -o data main.go && export PATH=$(pwd):$PATH
 
 ### COMMANDS
 + `data add` (used to add a single record: either income or expense) <br/>
-*-s* (optional): &emsp;adding subscription
+*-s* &emsp;adding subscription
 
 ```
 ➜ data add
@@ -49,11 +49,11 @@ Costco: $70/month
 ```
 
 + `data show` (used to retrieve your financial data) <br/>
-*-i*: &emsp;&nbsp;&nbsp;show only income data <br/>
-*-e*: &emsp;&nbsp;show only expense data <br/>
-*-m*: &emsp;show only data filtered by specified month <br/>
-*-y*: &emsp;&nbsp;show only data filtered by specified year <br/>
-*-k*: &emsp;&nbsp;show only data filtered by specified keyword <br/>
+*-i* &emsp;&nbsp;&nbsp;show only income data <br/>
+*-e* &emsp;&nbsp;show only expense data <br/>
+*-m* &emsp;show only data filtered by specified month <br/>
+*-y* &emsp;&nbsp;show only data filtered by specified year <br/>
+*-k* &emsp;&nbsp;show only data filtered by specified keyword <br/>
 
 ```
 ➜ data show -m=7 -i
