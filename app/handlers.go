@@ -73,7 +73,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 		Category:    category,
 		Code:        code,
 	}
-	utils.PrintSingleRecord(record, utils.BWhite)
+	utils.PrintSingleRecord(record, utils.Green)
 
 	confirmed := utils.ConfirmYesNoPromt("Do you confirm to enter above record")
 	if confirmed {
@@ -96,7 +96,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 }
 
-func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expense *bool, keyword *string) {
+func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, income *bool, expense *bool, keyword *string) {
 	showCmd.Parse(os.Args[2:])
 
 	if showCmd.NArg() != 0 {
@@ -107,6 +107,11 @@ func HandleShow(showCmd *flag.FlagSet, month *int, year *int, income *bool, expe
 	if *year != -1 && (*year < 2017 || *year > time.Now().Year()) {
 		fmt.Println(utils.Colorize("No data found for the requested year...!", utils.BRed))
 		return
+	}
+
+	if *current == true {
+		*month = int(time.Now().Month())
+		*year = time.Now().Year()
 	}
 
 	var flag string

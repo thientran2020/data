@@ -13,6 +13,7 @@ func AppInit() {
 	addSubscription := addCmd.Bool("s", false, "Specify when adding subscription/membership data")
 
 	showCmd := flag.NewFlagSet("show", flag.ExitOnError)
+	showCurrent := showCmd.Bool("c", false, "Specify when you want to retrieve current month data")
 	showMonth := showCmd.Int("m", -1, "Specify month you want to retrive financial data")
 	showYear := showCmd.Int("y", -1, "Specify year you want to retrive financial data")
 	showIncome := showCmd.Bool("i", false, "Specify when you want to retrieve income data")
@@ -34,7 +35,7 @@ func AppInit() {
 	case "add":
 		HandleAdd(addCmd, addSubscription)
 	case "show":
-		HandleShow(showCmd, showMonth, showYear, showIncome, showExpense, showKeyword)
+		HandleShow(showCmd, showCurrent, showMonth, showYear, showIncome, showExpense, showKeyword)
 	case "help":
 		HandleHelp(helpCmd)
 	case "category":
