@@ -69,7 +69,7 @@ func CsvWrite(filepath string, record models.Record) bool {
 
 func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
 	filepath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
-	if requestedYear >= 2017 && requestedYear <= time.Now().Year() {
+	if requestedYear >= models.START_YEAR && requestedYear <= time.Now().Year() {
 		filepath = strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", requestedYear), -1)
 	}
 

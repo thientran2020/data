@@ -1,9 +1,9 @@
 package models
 
 var (
-	HEADERS = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
-
-	LABELS = map[string]map[string]string{
+	START_YEAR = 2017
+	HEADERS    = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
+	LABELS     = map[string]map[string]string{
 		"Expense": {
 			"Description": "What did you spend money for",
 			"Cost":        "Nice. How much did you spend",

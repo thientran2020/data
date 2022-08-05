@@ -85,7 +85,7 @@ func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, inc
 		os.Exit(1)
 	}
 
-	if *year != -1 && (*year < 2017 || *year > time.Now().Year()) {
+	if *year != -1 && (*year < models.START_YEAR || *year > time.Now().Year()) {
 		fmt.Println(utils.Colorize("No data found for the requested year...!", utils.Red))
 		return
 	}

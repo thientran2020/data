@@ -162,3 +162,8 @@ func AddSubscription() {
 		PrintCustomizedMessage("Subscription ignored "+CheckMark, Red, true)
 	}
 }
+
+// TODOs
+func UpdateSubscription() {
+
+}
