@@ -1,4 +1,4 @@
-package app
+package utils
 
 import (
 	"encoding/csv"
@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/thientran2020/financial-cli/models"
-	"github.com/thientran2020/financial-cli/utils"
 )
 
 const (
@@ -26,7 +25,7 @@ const (
 )
 
 // file processing with os
-func fileExists(filepath string) bool {
+func FileExists(filepath string) bool {
 	file, err := os.Stat(filepath)
 	if os.IsNotExist(err) {
 		return false
@@ -34,7 +33,7 @@ func fileExists(filepath string) bool {
 	return !file.IsDir()
 }
 
-func createFile(filepath string) bool {
+func CreateFile(filepath string) bool {
 	file, err := os.Create(filepath)
 	if err != nil {
 		fmt.Printf("Cannot create new file at %s\n", filepath)
@@ -45,7 +44,7 @@ func createFile(filepath string) bool {
 }
 
 // csv file processing
-func csvWrite(filepath string, record models.Record) bool {
+func CsvWrite(filepath string, record models.Record) bool {
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		fmt.Println("Cannot open file to write ", err)
@@ -68,10 +67,10 @@ func csvWrite(filepath string, record models.Record) bool {
 	return true
 }
 
-func csvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
-	filepath := strings.Replace(models.BASE_FILEPATH, "?????", "", -1)
+func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
+	filepath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
 	if requestedYear >= 2017 && requestedYear <= time.Now().Year() {
-		filepath = strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", requestedYear), -1)
+		filepath = strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", requestedYear), -1)
 	}
 
 	file, err := os.Open(filepath)
@@ -102,7 +101,7 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 		skipRowByTypeFlag :=
 			(typeFlag == "income" && strings.Trim(row[category], " ") != "Income") ||
 				(typeFlag == "expense" && strings.Trim(row[category], " ") == "Income")
-		skipRowByKeyWord := !utils.ContainString(row[content], keyword) && !utils.ContainString(row[category], keyword)
+		skipRowByKeyWord := !ContainString(row[content], keyword) && !ContainString(row[category], keyword)
 
 		if skipRowByRequestedMonth || skipRowByTypeFlag || skipRowByKeyWord {
 			continue
@@ -114,9 +113,9 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 		rowData := []interface{}{
 			count,
 			fmt.Sprintf("%s-%s-%s",
-				utils.Colorize(utils.GetStringDateFromNumber(month), utils.Yellow),
-				utils.GetStringDateFromString(row[day]),
-				utils.Colorize(row[year], utils.UGreen),
+				Colorize(GetStringDateFromNumber(month), Yellow),
+				GetStringDateFromString(row[day]),
+				Colorize(row[year], UGreen),
 			),
 			strings.Trim(row[content], " "),
 			strings.Trim(row[category], " "),
@@ -129,12 +128,12 @@ func csvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 }
 
 // json file processing
-func readJson(filepath string) models.MySubscriptionList {
+func ReadJson(filepath string) models.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		createFile(filepath)
+		CreateFile(filepath)
 		fmt.Printf("Subcription list was created at %v\n", filepath)
-		return readJson(filepath)
+		return ReadJson(filepath)
 	}
 	result := models.MySubscriptionList{}
 
@@ -142,10 +141,33 @@ func readJson(filepath string) models.MySubscriptionList {
 	return result
 }
 
-func writeJson(filepath string, subscriptionList models.MySubscriptionList) {
+func WriteJson(filepath string, subscriptionList models.MySubscriptionList) {
 	file, _ := json.MarshalIndent(subscriptionList, "", " ")
 	err := ioutil.WriteFile(filepath, file, 0644)
 	if err != nil {
 		fmt.Printf("Error writing subscription data %v\n", err)
 	}
+}
+
+// Return filepaths for all-in-one file "finance.csv" and current year file "finance_<year>.csv"
+// Check if file exists - if not create a new one
+func GetDefaultFilePaths() (string, string, bool) {
+	commonFile := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
+	currentYearFile := strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", time.Now().Year()), -1)
+	fmt.Println("TESTING HERE + " + commonFile)
+	fmt.Println("TESTING HERE + " + currentYearFile)
+
+	var success bool
+	if !FileExists(commonFile) {
+		success = CreateFile(commonFile)
+	}
+
+	if !FileExists(currentYearFile) {
+		success = success && CreateFile(currentYearFile)
+	}
+
+	if !success {
+		return "", "", false
+	}
+	return commonFile, currentYearFile, true
 }

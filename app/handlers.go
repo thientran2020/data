@@ -21,24 +21,12 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 
 	if *sub == true {
-		AddSubscription()
+		utils.AddSubscription()
 		return
 	}
 
 	// Get current date
 	year, month, day := time.Now().Date()
-
-	// Create filepath for all-in-one file and current year file
-	// Check if file exists - if not create a new one
-	filepathCommon := strings.Replace(models.BASE_FILEPATH, "?????", "", -1)
-	if !fileExists(filepathCommon) {
-		createFile(filepathCommon)
-	}
-
-	filepathCurrentYear := strings.Replace(models.BASE_FILEPATH, "?????", fmt.Sprintf("_%d", year), -1)
-	if !fileExists(filepathCurrentYear) {
-		createFile(filepathCurrentYear)
-	}
 
 	// Prompt to input data
 	// 1. Check data entered is for expense or income
@@ -75,24 +63,17 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 	utils.PrintSingleRecord(record, utils.Green)
 
-	confirmed := utils.ConfirmYesNoPromt("Do you confirm to enter above record")
-	if confirmed {
-		if csvWrite(filepathCurrentYear, record) {
-			utils.PrintCustomizedMessage(
-				"Record has been successfully added at "+filepathCurrentYear,
-				utils.BRed,
-				true,
-			)
+	// Confirm record and enter to files
+	if utils.ConfirmYesNoPromt("Do you confirm to enter above record") {
+		commonFile, currentYearFile, ok := utils.GetDefaultFilePaths()
+		if !ok {
+			fmt.Println("Error accessing financial data. Please try again!")
+			os.Exit(1)
 		}
-		if csvWrite(filepathCommon, record) {
-			utils.PrintCustomizedMessage(
-				"Record has been successfully added at "+filepathCommon,
-				utils.BYellow,
-				true,
-			)
-		}
+		utils.AddRecord(commonFile, record)
+		utils.AddRecord(currentYearFile, record)
 	} else {
-		utils.PrintCustomizedMessage("Record ignored "+utils.CheckMark, utils.BRed, true)
+		utils.PrintCustomizedMessage("Record ignored "+utils.CheckMark, utils.Red, true)
 	}
 }
 
@@ -105,7 +86,7 @@ func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, inc
 	}
 
 	if *year != -1 && (*year < 2017 || *year > time.Now().Year()) {
-		fmt.Println(utils.Colorize("No data found for the requested year...!", utils.BRed))
+		fmt.Println(utils.Colorize("No data found for the requested year...!", utils.Red))
 		return
 	}
 
@@ -123,7 +104,7 @@ func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, inc
 		flag = "all"
 	}
 
-	data := csvRead(*year, *month, flag, *keyword)
+	data := utils.CsvRead(*year, *month, flag, *keyword)
 	utils.PrintTable(data, models.HEADERS, flag, simpletable.StyleDefault)
 }
 
@@ -158,50 +139,6 @@ func HandleSearch(searchCmd *flag.FlagSet) {
 	}
 
 	keyword := strings.Join(os.Args[2:], " ")
-	data := csvRead(-1, -1, "all", keyword)
+	data := utils.CsvRead(-1, -1, "all", keyword)
 	utils.PrintTable(data, models.HEADERS, "all", simpletable.StyleDefault)
-}
-
-func AddSubscription() {
-	subscriptionList := readJson(models.BASE_FILEPATH_SUBCRIPTION)
-
-	// Prompt user to enter neccessary information
-	startDate := strings.Split(time.Now().String(), " ")[0]
-	name, _ := utils.PromptEnter("What is your new subscription/membership", false)
-	ftype, _ := utils.InteractiveSelect(
-		"What type of your subscription",
-		[]string{"income", "expense"},
-	)
-	billingCycle, _ := utils.InteractiveSelect(
-		"Choose your billing cycle",
-		[]string{"monthly", "yearly"},
-	)
-	cost, _ := utils.NumberEnter("How much per billing period")
-
-	// Create new subscription and add to existing list
-	subscription := models.Subscription{
-		Name:         name,
-		Type:         ftype,
-		Cost:         int(cost),
-		BillingCycle: billingCycle,
-		StartDate:    startDate,
-	}
-
-	switch billingCycle {
-	case "monthly":
-		subscriptionList.Monthly = append(subscriptionList.Monthly, subscription)
-	case "yearly":
-		subscriptionList.Yearly = append(subscriptionList.Yearly, subscription)
-	}
-
-	// Print new subscription and ask for confirmation before adding
-	message := fmt.Sprintf("%s: $%d/%s", name, cost, strings.ToLower(billingCycle[:len(billingCycle)-2]))
-	utils.PrintCustomizedMessage(message, utils.BGreen, true)
-	confirmed := utils.ConfirmYesNoPromt("Do you confirm to enter above subscription")
-	if confirmed {
-		writeJson(models.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
-		utils.PrintCustomizedMessage("Successfully added at "+models.BASE_FILEPATH_SUBCRIPTION, utils.BYellow, true)
-	} else {
-		utils.PrintCustomizedMessage("Subscription ignored "+utils.CheckMark, utils.BRed, true)
-	}
 }

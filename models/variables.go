@@ -31,7 +31,7 @@ var (
 )
 
 const (
-	BASE_FILEPATH             = "./finance/finance?????.csv"
+	BASE_FILEPATH             = "./finance/finance<YEAR>.csv"
 	BASE_FILEPATH_SUBCRIPTION = "./finance/subscription.json"
 	HEADER_LINE               = "\n-------------------- YOUR FINANCIAL DATA --------------------\n"
 	DASH                      = "|-----|-----|-----|------------------------------------|--------|-------------------|"
