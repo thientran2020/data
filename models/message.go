@@ -8,4 +8,6 @@ var (
 	ShowIncomeMessage      = "Specify when you want to retrieve income data"
 	ShowExpenseMessage     = "Specify when you want to retrieve income data"
 	ShowKeywordMessage     = "Specify keyword for filtering"
+	GetCategoryMessage     = "Display category mapping table"
+	GetSubscriptionMessage = "Display current subscriptions' details"
 )

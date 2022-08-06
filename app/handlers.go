@@ -14,7 +14,6 @@ import (
 
 func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	addCmd.Parse(os.Args[2:])
-
 	if addCmd.NArg() != 0 {
 		addCmd.PrintDefaults()
 		os.Exit(1)
@@ -74,9 +73,8 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 }
 
-func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, income *bool, expense *bool, keyword *string) {
+func HandleShow(showCmd *flag.FlagSet, month, year *int, current, income, expense *bool, keyword *string) {
 	showCmd.Parse(os.Args[2:])
-
 	if showCmd.NArg() != 0 {
 		showCmd.PrintDefaults()
 		os.Exit(1)
@@ -116,15 +114,22 @@ func HandleHelp(helpCmd *flag.FlagSet) {
 	fmt.Print(m.INSTRUCTION)
 }
 
-func HandleCategory(ctgCmd *flag.FlagSet) {
-	ctgCmd.Parse(os.Args[2:])
+func HandleGet(getCmd *flag.FlagSet, getCategory, getSubscription *bool) {
+	getCmd.Parse(os.Args[2:])
+	if getCmd.NArg() > 0 || getCmd.NFlag() != 1 {
+		getCmd.PrintDefaults()
+		os.Exit(1)
+	}
 
-	if ctgCmd.NFlag() > 0 || ctgCmd.NArg() > 0 {
-		fmt.Println("Please don't specific any argument/flag.")
-		fmt.Println("Correct usage: 'data help'")
+	if *getCategory == true {
+		fmt.Print(m.CATEGORY_TABLE)
 		return
 	}
-	fmt.Print(m.CATEGORY_TABLE)
+
+	if *getSubscription == true {
+		u.GetSubscription()
+		return
+	}
 }
 
 func HandleSearch(searchCmd *flag.FlagSet) {

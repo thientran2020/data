@@ -68,10 +68,12 @@ SHOW FINANCIAL DATA FOR 7/2022:
 +---+------------+-------------+----------+------+
 ```
 
-+ `data category` (used to display a table of app categories) <br/>
++ `data get` (used to display more details) <br/>
+*-c* &emsp;&nbsp;display category mapping table <br/>
+*-s* &emsp;&nbsp;display current subscriptions' details <br/>
 
 ```
-➜ data category
+➜ data get
 
 			CATEGORY TABLE
 	|------|-----------------------------------------|

@@ -3,8 +3,6 @@ package utils
 import (
 	"fmt"
 	"strconv"
-	"strings"
-	"time"
 
 	"github.com/alexeyco/simpletable"
 	m "github.com/thientran2020/financial-cli/models"
@@ -87,7 +85,7 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 				},
 			},
 		}
-	default:
+	case "all":
 		footer = &simpletable.Footer{
 			Cells: []*simpletable.Cell{
 				{
@@ -105,6 +103,16 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 				},
 			},
 		}
+	default:
+		footer = &simpletable.Footer{
+			Cells: []*simpletable.Cell{
+				{
+					Align: simpletable.AlignCenter,
+					Span:  4,
+					Text:  fmt.Sprintf("%s", Colorize("__________ ^o^ __________", Red)),
+				},
+			},
+		}
 	}
 
 	table.Footer = footer
@@ -117,53 +125,4 @@ func AddRecord(filepath string, record m.Record, color string) {
 	if CsvWrite(filepath, record) {
 		PrintCustomizedMessage("Record has been successfully added at "+filepath, color, true)
 	}
-}
-
-func AddSubscription() {
-	subscriptionList := ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
-
-	// Prompt user to enter neccessary information
-	startDate := strings.Split(time.Now().String(), " ")[0]
-	name, _ := PromptEnter("What is your new subscription/membership", false)
-	ftype, _ := InteractiveSelect(
-		"What type of your subscription",
-		[]string{"income", "expense"},
-	)
-	billingCycle, _ := InteractiveSelect(
-		"Choose your billing cycle",
-		[]string{"monthly", "yearly"},
-	)
-	cost, _ := NumberEnter("How much per billing period")
-
-	// Create new subscription and add to existing list
-	subscription := m.Subscription{
-		Name:         name,
-		Type:         ftype,
-		Cost:         int(cost),
-		BillingCycle: billingCycle,
-		StartDate:    startDate,
-	}
-
-	switch billingCycle {
-	case "monthly":
-		subscriptionList.Monthly = append(subscriptionList.Monthly, subscription)
-	case "yearly":
-		subscriptionList.Yearly = append(subscriptionList.Yearly, subscription)
-	}
-
-	// Print new subscription and ask for confirmation before adding
-	message := fmt.Sprintf("%s: $%d/%s", name, cost, strings.ToLower(billingCycle[:len(billingCycle)-2]))
-	PrintCustomizedMessage(message, Green, true)
-	confirmed := ConfirmYesNoPromt("Do you confirm to enter above subscription")
-	if confirmed {
-		WriteJson(m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
-		PrintCustomizedMessage("Successfully added at "+m.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
-	} else {
-		PrintCustomizedMessage("Subscription ignored "+CheckMark, Red, true)
-	}
-}
-
-// TODOs
-func UpdateSubscription() {
-
 }

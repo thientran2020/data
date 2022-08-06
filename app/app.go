@@ -22,7 +22,9 @@ func AppInit() {
 
 	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
 
-	ctgCmd := flag.NewFlagSet("category", flag.ExitOnError)
+	getCmd := flag.NewFlagSet("get", flag.ExitOnError)
+	getCategory := getCmd.Bool("c", false, m.GetCategoryMessage)
+	getSubscription := getCmd.Bool("s", false, m.GetSubscriptionMessage)
 
 	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
 
@@ -35,11 +37,11 @@ func AppInit() {
 	case "add":
 		HandleAdd(addCmd, addSubscription)
 	case "show":
-		HandleShow(showCmd, showCurrent, showMonth, showYear, showIncome, showExpense, showKeyword)
+		HandleShow(showCmd, showMonth, showYear, showCurrent, showIncome, showExpense, showKeyword)
 	case "help":
 		HandleHelp(helpCmd)
-	case "category":
-		HandleCategory(ctgCmd)
+	case "get":
+		HandleGet(getCmd, getCategory, getSubscription)
 	case "search":
 		HandleSearch(searchCmd)
 	default:

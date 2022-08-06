@@ -57,16 +57,19 @@ COMMANDS
 		-y: specify year you want to retrive financial data
 			Ex: 2021, 2022,...
 		-h: print default instruction
+	
+	- data get
+	USAGE: get category mapping table or subscriptions' details
+	FLAGS:
+		-c: display category map for specific details
+		-s: display subscriptions' details
+	
+	- data search <keyword>
+	USAGE: search specific financial key
 
 	- data help
 	USAGE: display app's instruction
 	
-	- data category
-	USAGE: display category map for specific details 
-
-	- data search <keyword>
-	USAGE: search specific financial key
-
 ---------------------------------------------------------------------------------
 `
 
