@@ -63,10 +63,8 @@ func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 	}
 }
 
-func GetSubscription() {
-	data := ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
-	PrintSubcriptionList("monthly", data.Monthly)
-	PrintSubcriptionList("yearly", data.Yearly)
+func GetSubscription() m.MySubscriptionList {
+	return ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
 }
 
 // TODOs

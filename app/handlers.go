@@ -122,12 +122,14 @@ func HandleGet(getCmd *flag.FlagSet, getCategory, getSubscription *bool) {
 	}
 
 	if *getCategory == true {
-		fmt.Print(m.CATEGORY_TABLE)
+		u.PrintCustomizedMessage(m.CATEGORY_TABLE, u.White, true)
 		return
 	}
 
 	if *getSubscription == true {
-		u.GetSubscription()
+		data := u.GetSubscription()
+		u.PrintSubcriptionList("monthly", data.Monthly)
+		u.PrintSubcriptionList("yearly", data.Yearly)
 		return
 	}
 }
