@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	m "github.com/thientran2020/financial-cli/models"
 )
@@ -12,7 +11,6 @@ func AddSubscription() {
 	subscriptionList := ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
-	startDate := strings.Split(time.Now().String(), " ")[0]
 	name, _ := PromptEnter("What is your new subscription/membership", false)
 	ftype, _ := InteractiveSelect(
 		"What type of your subscription",
@@ -23,6 +21,11 @@ func AddSubscription() {
 		[]string{"monthly", "yearly"},
 	)
 	cost, _ := NumberEnter("How much per billing period")
+	startDate, _ := PromptEnter("What was the start date (mm-dd-yyyy)", false)
+	if !IsValidDate(startDate) {
+		fmt.Println("Not a valid date. Please rerun and enter required format mm-dd-yyyy!")
+		return
+	}
 
 	// Create new subscription and add to existing list
 	subscription := m.Subscription{
@@ -54,12 +57,11 @@ func AddSubscription() {
 
 func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 	if subcriptions != nil {
-		title := fmt.Sprintf("\n***** %s SUBSCRIPTION & MEMBERSHIP *****\n", strings.ToUpper(billingCycle))
+		title := fmt.Sprintf("\n%s SUBSCRIPTION & MEMBERSHIP\n", strings.ToUpper(billingCycle))
 		fmt.Printf(Colorize(title, Yellow))
 		for _, sub := range subcriptions {
-			fmt.Printf("%-14s [%-7s] $%-7d || Start date: %s\n", sub.Name, sub.Type, sub.Cost, sub.StartDate)
+			fmt.Printf("%-28s [%-7s] $%-7d || Start date: %s\n", sub.Name, sub.Type, sub.Cost, sub.StartDate)
 		}
-		fmt.Println()
 	}
 }
 

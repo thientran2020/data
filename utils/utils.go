@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -128,6 +129,11 @@ func ContainString(s, ss string) bool {
 
 func Colorize(text string, color string) string {
 	return fmt.Sprintf("%s%s%s", color, text, ColorOff)
+}
+
+func IsValidDate(dateString string) bool {
+	re := regexp.MustCompile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)")
+	return re.MatchString(dateString)
 }
 
 // Resolve terminal's bell ring issue when moving between interactive select

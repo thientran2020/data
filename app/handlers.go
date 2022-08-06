@@ -130,6 +130,7 @@ func HandleGet(getCmd *flag.FlagSet, getCategory, getSubscription *bool) {
 		data := u.GetSubscription()
 		u.PrintSubcriptionList("monthly", data.Monthly)
 		u.PrintSubcriptionList("yearly", data.Yearly)
+		fmt.Println()
 		return
 	}
 }
