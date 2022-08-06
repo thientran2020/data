@@ -68,9 +68,9 @@ func CsvWrite(filepath string, record m.Record) bool {
 }
 
 func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
-	filepath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", "", -1)
+	filepath := GetSharedFile()
 	if requestedYear >= m.START_YEAR && requestedYear <= time.Now().Year() {
-		filepath = strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", requestedYear), -1)
+		filepath = GetSpecificYearFile(requestedYear)
 	}
 
 	file, err := os.Open(filepath)
@@ -159,8 +159,8 @@ func GetSharedFile() string {
 	return sharedFilePath
 }
 
-func GetCurrentYearFile() string {
-	currentYearFilePath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", time.Now().Year()), -1)
+func GetSpecificYearFile(year int) string {
+	currentYearFilePath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", year), -1)
 	if !FileExists(currentYearFilePath) {
 		CreateFile(currentYearFilePath)
 	}

@@ -65,7 +65,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	// Confirm record and enter to files
 	if u.ConfirmYesNoPromt("Do you confirm to enter above record") {
 		sharedFile := u.GetSharedFile()
-		currentYearFile := u.GetCurrentYearFile()
+		currentYearFile := u.GetSpecificYearFile(time.Now().Year())
 		u.AddRecord(sharedFile, record, u.Yellow)
 		u.AddRecord(currentYearFile, record, u.Red)
 	} else {
