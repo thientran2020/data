@@ -106,7 +106,7 @@ func HandleShow(showCmd *flag.FlagSet, month, year *int, current, income, expens
 	}
 
 	// Retrieve, filter and display data
-	data := u.CsvRead(filepath)
+	data, _ := u.CsvRead(filepath)
 	filteredData := u.FilterData(data, *month, flag, *keyword)
 	u.PrintTable(filteredData, m.HEADERS, flag, simpletable.StyleDefault)
 }
@@ -152,7 +152,7 @@ func HandleSearch(searchCmd *flag.FlagSet) {
 	}
 
 	keyword := strings.Join(os.Args[2:], " ")
-	data := u.CsvRead(u.GetSharedFile())
+	data, _ := u.CsvRead(u.GetSharedFile())
 	filteredData := u.FilterData(data, -1, "all", keyword)
 	u.PrintTable(filteredData, m.HEADERS, "all", simpletable.StyleDefault)
 }

@@ -68,8 +68,3 @@ func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 func GetSubscription() m.MySubscriptionList {
 	return ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
 }
-
-// TODOs
-func UpdateSubscription() {
-
-}

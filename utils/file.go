@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -22,6 +23,9 @@ const (
 	category
 	code
 )
+
+type Data [][]interface{}
+type String2D [][]string
 
 // file processing with os
 func FileExists(filepath string) bool {
@@ -66,7 +70,8 @@ func CsvWrite(filepath string, record m.Record) bool {
 	return true
 }
 
-func CsvRead(filepath string) Data {
+func CsvRead(filepath string) (Data, String2D) {
+	original_data := String2D{}
 	data := Data{}
 
 	file, err := os.Open(filepath)
@@ -105,11 +110,14 @@ func CsvRead(filepath string) Data {
 			strings.Trim(row[category], " "),
 			cost,
 		}
+
 		data = append(data, rowData)
+		original_data = append(original_data, row)
 	}
-	return data
+	return data, original_data
 }
 
+// Filter []Record data based on month, type (income/expense) & keyword
 func FilterData(data Data, month int, typeFlag, keyword string) Data {
 	filteredData := Data{}
 	for _, row := range data {
@@ -137,7 +145,7 @@ func FilterData(data Data, month int, typeFlag, keyword string) Data {
 	return filteredData
 }
 
-// json file processing
+// JSON file processing
 func ReadJson(filepath string) m.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
@@ -175,4 +183,46 @@ func GetSpecificYearFile(year int) string {
 		CreateFile(currentYearFilePath)
 	}
 	return currentYearFilePath
+}
+
+// Read + Sort by date + Overwrite CSV file with sorted data
+func CsvUpdate(filepath string) {
+	_, data := CsvRead(filepath)
+	sort.Sort(data)
+
+	// Overwrite existing file
+	file, err := os.Create(filepath)
+	if err != nil {
+		fmt.Printf("Cannot open file at %s: %s", filepath, err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	writer.WriteAll(data)
+	if err := writer.Error(); err != nil {
+		fmt.Printf("Error overwriting at %s: %s", filepath, err)
+	}
+}
+
+// Sort 2D array
+// Call sort.Sort(Data(data)) to sort
+func (data String2D) Less(i, j int) bool {
+	y1, _ := strconv.Atoi(data[i][0])
+	m1, _ := strconv.Atoi(data[i][1])
+	d1, _ := strconv.Atoi(data[i][2])
+
+	y2, _ := strconv.Atoi(data[j][0])
+	m2, _ := strconv.Atoi(data[j][1])
+	d2, _ := strconv.Atoi(data[j][2])
+
+	I_before_J := y1 < y2 || (y1 == y2 && (m1 < m2 || (m1 == m2 && d1 <= d2)))
+	return I_before_J
+}
+
+func (data String2D) Len() int {
+	return len(data)
+}
+
+func (data String2D) Swap(i, j int) {
+	data[i], data[j] = data[j], data[i]
 }
