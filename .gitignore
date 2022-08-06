@@ -2,3 +2,6 @@ finance/
 
 # executable go build filename
 data
+
+# workspace
+workspace.txt

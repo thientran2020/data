@@ -9,7 +9,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	m "github.com/thientran2020/financial-cli/models"
 )
@@ -67,11 +66,8 @@ func CsvWrite(filepath string, record m.Record) bool {
 	return true
 }
 
-func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
-	filepath := GetSharedFile()
-	if requestedYear >= m.START_YEAR && requestedYear <= time.Now().Year() {
-		filepath = GetSpecificYearFile(requestedYear)
-	}
+func CsvRead(filepath string) Data {
+	data := Data{}
 
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -85,7 +81,6 @@ func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 		fmt.Printf("Error reading file %s", err)
 	}
 
-	data := [][]interface{}{}
 	count := 0
 	for {
 		row, err := reader.Read()
@@ -96,26 +91,15 @@ func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 			fmt.Printf("Error reading file %s", err)
 		}
 
-		month, _ := strconv.Atoi(row[month])
-		skipRowByRequestedMonth := requestedMonth != -1 && month != requestedMonth
-		skipRowByTypeFlag :=
-			(typeFlag == "income" && strings.Trim(row[category], " ") != "Income") ||
-				(typeFlag == "expense" && strings.Trim(row[category], " ") == "Income")
-		skipRowByKeyWord := !ContainString(row[content], keyword) && !ContainString(row[category], keyword)
-
-		if skipRowByRequestedMonth || skipRowByTypeFlag || skipRowByKeyWord {
-			continue
-		}
-
 		count++
+		month, _ := strconv.Atoi(row[month])
 		cost, _ := strconv.Atoi(row[cost])
-
 		rowData := []interface{}{
 			count,
 			fmt.Sprintf("%s-%s-%s",
-				Colorize(GetStringDateFromNumber(month), Yellow),
+				GetStringDateFromNumber(month),
 				GetStringDateFromString(row[day]),
-				Colorize(row[year], UGreen),
+				row[year],
 			),
 			strings.Trim(row[content], " "),
 			strings.Trim(row[category], " "),
@@ -123,8 +107,34 @@ func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 		}
 		data = append(data, rowData)
 	}
-
 	return data
+}
+
+func FilterData(data Data, month int, typeFlag, keyword string) Data {
+	filteredData := Data{}
+	for _, row := range data {
+		dateArray := strings.Split(row[1].(string), "-")
+		row_month, _ := strconv.Atoi(dateArray[0])
+		skipRowByMonth := month != -1 && row_month != month
+
+		skipRowByTypeFlag :=
+			(typeFlag == "income" && row[3] != "Income") ||
+				(typeFlag == "expense" && row[3] == "Income")
+
+		skipRowByKeyWord := !ContainString(row[2].(string), keyword) && !ContainString(row[3].(string), keyword)
+
+		skip := skipRowByMonth || skipRowByTypeFlag || skipRowByKeyWord
+		if !skip {
+			formatted_date := fmt.Sprintf("%s-%s-%s",
+				Colorize(dateArray[0], Yellow),
+				dateArray[1],
+				Colorize(dateArray[2], UGreen),
+			)
+			row[1] = formatted_date
+			filteredData = append(filteredData, row)
+		}
+	}
+	return filteredData
 }
 
 // json file processing
