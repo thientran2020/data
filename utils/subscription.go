@@ -54,10 +54,12 @@ func AddSubscription() {
 
 func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 	if subcriptions != nil {
-		fmt.Printf("%s SUBSCRIPTION & MEMBERSHIP\n", strings.ToUpper(billingCycle))
+		title := fmt.Sprintf("\n***** %s SUBSCRIPTION & MEMBERSHIP *****\n", strings.ToUpper(billingCycle))
+		fmt.Printf(Colorize(title, Yellow))
 		for _, sub := range subcriptions {
-			fmt.Printf("%-14s [%-7s] $%-10d || Start date: %s\n", sub.Name, sub.Type, sub.Cost, sub.StartDate)
+			fmt.Printf("%-14s [%-7s] $%-7d || Start date: %s\n", sub.Name, sub.Type, sub.Cost, sub.StartDate)
 		}
+		fmt.Println()
 	}
 }
 
