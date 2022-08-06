@@ -30,6 +30,8 @@ const (
 	CheckMark                  = "\u2713"
 )
 
+type Data [][]interface{}
+
 // Different Input Types
 func ConfirmYesNoPromt(label string) bool {
 	prompt := promptui.Prompt{
@@ -134,6 +136,35 @@ func Colorize(text string, color string) string {
 func IsValidDate(dateString string) bool {
 	re := regexp.MustCompile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)")
 	return re.MatchString(dateString)
+}
+
+// Return date string with format "mm-dd-yyyy" to month, day, year numbers
+func GetDateNumber(dateString string) (int, int, int) {
+	date := strings.Split(dateString, "-")
+	m, _ := strconv.Atoi(date[0])
+	d, _ := strconv.Atoi(date[1])
+	y, _ := strconv.Atoi(date[2])
+	return m, d, y
+}
+
+// Sort 2D array
+// Call sort.Sort(Data(data)) to sort
+func (data Data) Less(i, j int) bool {
+	dateColumnIndex := 1
+	date1 := data[i][dateColumnIndex].(string)
+	date2 := data[j][dateColumnIndex].(string)
+	m1, d1, y1 := GetDateNumber(date1)
+	m2, d2, y2 := GetDateNumber(date2)
+	before := y1 < y2 || (y1 == y2 && (m1 < m2 || (m1 == m2 && d1 <= d2)))
+	return before
+}
+
+func (data Data) Len() int {
+	return len(data)
+}
+
+func (data Data) Swap(i, j int) {
+	data[i], data[j] = data[j], data[i]
 }
 
 // Resolve terminal's bell ring issue when moving between interactive select
