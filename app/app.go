@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/thientran2020/financial-cli/models"
+	m "github.com/thientran2020/financial-cli/models"
 )
 
 func AppInit() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-	addSubscription := addCmd.Bool("s", false, "Specify when adding subscription/membership data")
+	addSubscription := addCmd.Bool("s", false, m.AddSubscriptionMessage)
 
 	showCmd := flag.NewFlagSet("show", flag.ExitOnError)
-	showCurrent := showCmd.Bool("c", false, "Specify when you want to retrieve current month data")
-	showMonth := showCmd.Int("m", -1, "Specify month you want to retrive financial data")
-	showYear := showCmd.Int("y", -1, "Specify year you want to retrive financial data")
-	showIncome := showCmd.Bool("i", false, "Specify when you want to retrieve income data")
-	showExpense := showCmd.Bool("e", false, "Specify when you want to retrieve income data")
-	showKeyword := showCmd.String("k", "", "Specify keyword for filtering")
+	showCurrent := showCmd.Bool("c", false, m.ShowCurrentMessage)
+	showMonth := showCmd.Int("m", -1, m.ShowMonthMessage)
+	showYear := showCmd.Int("y", -1, m.ShowYearMessage)
+	showIncome := showCmd.Bool("i", false, m.ShowIncomeMessage)
+	showExpense := showCmd.Bool("e", false, m.ShowExpenseMessage)
+	showKeyword := showCmd.String("k", "", m.ShowKeywordMessage)
 
 	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
 
@@ -43,6 +43,6 @@ func AppInit() {
 	case "search":
 		HandleSearch(searchCmd)
 	default:
-		fmt.Print(models.INSTRUCTION)
+		fmt.Print(m.INSTRUCTION)
 	}
 }

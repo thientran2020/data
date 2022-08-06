@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/alexeyco/simpletable"
-	"github.com/thientran2020/financial-cli/models"
-	"github.com/thientran2020/financial-cli/utils"
+	m "github.com/thientran2020/financial-cli/models"
+	u "github.com/thientran2020/financial-cli/utils"
 )
 
 func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
@@ -21,7 +21,7 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 
 	if *sub == true {
-		utils.AddSubscription()
+		u.AddSubscription()
 		return
 	}
 
@@ -34,25 +34,25 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	// 3. Get $$$ spent
 	// 4. Choose category
 	// 5. Convert category to code
-	ftype, _ := utils.InteractiveSelect(
+	ftype, _ := u.InteractiveSelect(
 		"What type of financial data are you entering",
 		[]string{"Income", "Expense"},
 	)
-	description, _ := utils.PromptEnter(models.LABELS[ftype]["Description"], false)
-	cost, _ := utils.NumberEnter(models.LABELS[ftype]["Cost"])
-	category, _ := utils.InteractiveSelect(
+	description, _ := u.PromptEnter(m.LABELS[ftype]["Description"], false)
+	cost, _ := u.NumberEnter(m.LABELS[ftype]["Cost"])
+	category, _ := u.InteractiveSelect(
 		"Pick the category that describe best your entered data",
-		models.CATEGORY,
+		m.CATEGORY,
 	)
 	var code int
-	for index := range models.CATEGORY {
-		if models.CATEGORY[index] == category {
+	for index := range m.CATEGORY {
+		if m.CATEGORY[index] == category {
 			code = index
 		}
 	}
 
 	// Create record and ask for confirmation before adding
-	record := models.Record{
+	record := m.Record{
 		Year:        year,
 		Month:       int(month),
 		Day:         day,
@@ -61,16 +61,16 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 		Category:    category,
 		Code:        code,
 	}
-	utils.PrintSingleRecord(record, utils.Green)
+	u.PrintSingleRecord(record, u.Green)
 
 	// Confirm record and enter to files
-	if utils.ConfirmYesNoPromt("Do you confirm to enter above record") {
-		sharedFile := utils.GetSharedFile()
-		currentYearFile := utils.GetCurrentYearFile()
-		utils.AddRecord(sharedFile, record, utils.Yellow)
-		utils.AddRecord(currentYearFile, record, utils.Red)
+	if u.ConfirmYesNoPromt("Do you confirm to enter above record") {
+		sharedFile := u.GetSharedFile()
+		currentYearFile := u.GetCurrentYearFile()
+		u.AddRecord(sharedFile, record, u.Yellow)
+		u.AddRecord(currentYearFile, record, u.Red)
 	} else {
-		utils.PrintCustomizedMessage("Record ignored "+utils.CheckMark, utils.Red, true)
+		u.PrintCustomizedMessage("Record ignored "+u.CheckMark, u.Red, true)
 	}
 }
 
@@ -82,8 +82,8 @@ func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, inc
 		os.Exit(1)
 	}
 
-	if *year != -1 && (*year < models.START_YEAR || *year > time.Now().Year()) {
-		fmt.Println(utils.Colorize("No data found for the requested year...!", utils.Red))
+	if *year != -1 && (*year < m.START_YEAR || *year > time.Now().Year()) {
+		fmt.Println(u.Colorize("No data found for the requested year...!", u.Red))
 		return
 	}
 
@@ -101,8 +101,8 @@ func HandleShow(showCmd *flag.FlagSet, current *bool, month *int, year *int, inc
 		flag = "all"
 	}
 
-	data := utils.CsvRead(*year, *month, flag, *keyword)
-	utils.PrintTable(data, models.HEADERS, flag, simpletable.StyleDefault)
+	data := u.CsvRead(*year, *month, flag, *keyword)
+	u.PrintTable(data, m.HEADERS, flag, simpletable.StyleDefault)
 }
 
 func HandleHelp(helpCmd *flag.FlagSet) {
@@ -113,7 +113,7 @@ func HandleHelp(helpCmd *flag.FlagSet) {
 		fmt.Println("Correct usage: 'data help'")
 		return
 	}
-	fmt.Print(models.INSTRUCTION)
+	fmt.Print(m.INSTRUCTION)
 }
 
 func HandleCategory(ctgCmd *flag.FlagSet) {
@@ -124,7 +124,7 @@ func HandleCategory(ctgCmd *flag.FlagSet) {
 		fmt.Println("Correct usage: 'data help'")
 		return
 	}
-	fmt.Print(models.CATEGORY_TABLE)
+	fmt.Print(m.CATEGORY_TABLE)
 }
 
 func HandleSearch(searchCmd *flag.FlagSet) {
@@ -136,6 +136,6 @@ func HandleSearch(searchCmd *flag.FlagSet) {
 	}
 
 	keyword := strings.Join(os.Args[2:], " ")
-	data := utils.CsvRead(-1, -1, "all", keyword)
-	utils.PrintTable(data, models.HEADERS, "all", simpletable.StyleDefault)
+	data := u.CsvRead(-1, -1, "all", keyword)
+	u.PrintTable(data, m.HEADERS, "all", simpletable.StyleDefault)
 }

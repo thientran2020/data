@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/thientran2020/financial-cli/models"
+	m "github.com/thientran2020/financial-cli/models"
 )
 
 const (
@@ -44,7 +44,7 @@ func CreateFile(filepath string) bool {
 }
 
 // csv file processing
-func CsvWrite(filepath string, record models.Record) bool {
+func CsvWrite(filepath string, record m.Record) bool {
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		fmt.Println("Cannot open file to write ", err)
@@ -68,9 +68,9 @@ func CsvWrite(filepath string, record models.Record) bool {
 }
 
 func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword string) [][]interface{} {
-	filepath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
-	if requestedYear >= models.START_YEAR && requestedYear <= time.Now().Year() {
-		filepath = strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", requestedYear), -1)
+	filepath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", "", -1)
+	if requestedYear >= m.START_YEAR && requestedYear <= time.Now().Year() {
+		filepath = strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", requestedYear), -1)
 	}
 
 	file, err := os.Open(filepath)
@@ -128,20 +128,20 @@ func CsvRead(requestedYear int, requestedMonth int, typeFlag string, keyword str
 }
 
 // json file processing
-func ReadJson(filepath string) models.MySubscriptionList {
+func ReadJson(filepath string) m.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		CreateFile(filepath)
 		fmt.Printf("Subcription list was created at %v\n", filepath)
 		return ReadJson(filepath)
 	}
-	result := models.MySubscriptionList{}
+	result := m.MySubscriptionList{}
 
 	_ = json.Unmarshal([]byte(file), &result)
 	return result
 }
 
-func WriteJson(filepath string, subscriptionList models.MySubscriptionList) {
+func WriteJson(filepath string, subscriptionList m.MySubscriptionList) {
 	file, _ := json.MarshalIndent(subscriptionList, "", " ")
 	err := ioutil.WriteFile(filepath, file, 0644)
 	if err != nil {
@@ -152,7 +152,7 @@ func WriteJson(filepath string, subscriptionList models.MySubscriptionList) {
 // Return filepaths for all-in-one file "finance.csv" and current year file "finance_<year>.csv"
 // Check if files exist - if not create new ones
 func GetSharedFile() string {
-	sharedFilePath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
+	sharedFilePath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", "", -1)
 	if !FileExists(sharedFilePath) {
 		CreateFile(sharedFilePath)
 	}
@@ -160,7 +160,7 @@ func GetSharedFile() string {
 }
 
 func GetCurrentYearFile() string {
-	currentYearFilePath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", time.Now().Year()), -1)
+	currentYearFilePath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", time.Now().Year()), -1)
 	if !FileExists(currentYearFilePath) {
 		CreateFile(currentYearFilePath)
 	}

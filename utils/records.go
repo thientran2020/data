@@ -7,16 +7,16 @@ import (
 	"time"
 
 	"github.com/alexeyco/simpletable"
-	"github.com/thientran2020/financial-cli/models"
+	m "github.com/thientran2020/financial-cli/models"
 )
 
-func PrintSingleRecord(record models.Record, color string) {
+func PrintSingleRecord(record m.Record, color string) {
 	date := fmt.Sprintf("    %s/%s/%s   ", GetStringDateFromNumber(record.Month), GetStringDateFromNumber(record.Day), strconv.Itoa(record.Year))
 	description := fmt.Sprintf(" %-35s", record.Description)
 	costString := fmt.Sprintf(" $%-6s", strconv.Itoa(record.Cost))
 	category := fmt.Sprintf(" %-18s", record.Category)
 
-	message := fmt.Sprintf("\n%s\n|%s|%s|%s|%s|\n%s\n", models.DASH, date, description, costString, category, models.DASH)
+	message := fmt.Sprintf("\n%s\n|%s|%s|%s|%s|\n%s\n", m.DASH, date, description, costString, category, m.DASH)
 	PrintCustomizedMessage(message, color, true)
 }
 
@@ -109,18 +109,18 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 
 	table.Footer = footer
 	table.SetStyle(style)
-	fmt.Println(Colorize(models.HEADER_LINE, Green))
+	fmt.Println(Colorize(m.HEADER_LINE, Green))
 	table.Println()
 }
 
-func AddRecord(filepath string, record models.Record, color string) {
+func AddRecord(filepath string, record m.Record, color string) {
 	if CsvWrite(filepath, record) {
 		PrintCustomizedMessage("Record has been successfully added at "+filepath, color, true)
 	}
 }
 
 func AddSubscription() {
-	subscriptionList := ReadJson(models.BASE_FILEPATH_SUBCRIPTION)
+	subscriptionList := ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
 	startDate := strings.Split(time.Now().String(), " ")[0]
@@ -136,7 +136,7 @@ func AddSubscription() {
 	cost, _ := NumberEnter("How much per billing period")
 
 	// Create new subscription and add to existing list
-	subscription := models.Subscription{
+	subscription := m.Subscription{
 		Name:         name,
 		Type:         ftype,
 		Cost:         int(cost),
@@ -156,8 +156,8 @@ func AddSubscription() {
 	PrintCustomizedMessage(message, Green, true)
 	confirmed := ConfirmYesNoPromt("Do you confirm to enter above subscription")
 	if confirmed {
-		WriteJson(models.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
-		PrintCustomizedMessage("Successfully added at "+models.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
+		WriteJson(m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
+		PrintCustomizedMessage("Successfully added at "+m.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
 	} else {
 		PrintCustomizedMessage("Subscription ignored "+CheckMark, Red, true)
 	}
