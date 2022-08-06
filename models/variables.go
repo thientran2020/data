@@ -46,16 +46,17 @@ COMMANDS
 	- data add
 	USAGE: add financial data (expense or income)
 	FLAGS:
-		-s: Specify this is a subscription data which will be handled automatically by billing cycle
+		-s: add subscription/membership data 
+		    this will be handled automatically based on its billing cycle
 
 	- data show
 	USAGE: display financial data in table format - current date by default 
 	FLAGS:
-		-m: Specify month you want to retrive financial data 
+		-m: specify month you want to retrive financial data 
 			Ex: 1, 2, 10,....
-		-y: Specify year you want to retrive financial data
+		-y: specify year you want to retrive financial data
 			Ex: 2021, 2022,...
-		-h: Print default instruction
+		-h: print default instruction
 
 	- data help
 	USAGE: display app's instruction

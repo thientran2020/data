@@ -113,9 +113,9 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 	table.Println()
 }
 
-func AddRecord(filepath string, record models.Record) {
+func AddRecord(filepath string, record models.Record, color string) {
 	if CsvWrite(filepath, record) {
-		PrintCustomizedMessage("Record has been successfully added at "+filepath, Red, true)
+		PrintCustomizedMessage("Record has been successfully added at "+filepath, color, true)
 	}
 }
 

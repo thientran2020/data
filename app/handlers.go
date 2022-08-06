@@ -65,13 +65,10 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 
 	// Confirm record and enter to files
 	if utils.ConfirmYesNoPromt("Do you confirm to enter above record") {
-		commonFile, currentYearFile, ok := utils.GetDefaultFilePaths()
-		if !ok {
-			fmt.Println("Error accessing financial data. Please try again!")
-			os.Exit(1)
-		}
-		utils.AddRecord(commonFile, record)
-		utils.AddRecord(currentYearFile, record)
+		sharedFile := utils.GetSharedFile()
+		currentYearFile := utils.GetCurrentYearFile()
+		utils.AddRecord(sharedFile, record, utils.Yellow)
+		utils.AddRecord(currentYearFile, record, utils.Red)
 	} else {
 		utils.PrintCustomizedMessage("Record ignored "+utils.CheckMark, utils.Red, true)
 	}

@@ -150,24 +150,19 @@ func WriteJson(filepath string, subscriptionList models.MySubscriptionList) {
 }
 
 // Return filepaths for all-in-one file "finance.csv" and current year file "finance_<year>.csv"
-// Check if file exists - if not create a new one
-func GetDefaultFilePaths() (string, string, bool) {
-	commonFile := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
-	currentYearFile := strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", time.Now().Year()), -1)
-	fmt.Println("TESTING HERE + " + commonFile)
-	fmt.Println("TESTING HERE + " + currentYearFile)
-
-	var success bool
-	if !FileExists(commonFile) {
-		success = CreateFile(commonFile)
+// Check if files exist - if not create new ones
+func GetSharedFile() string {
+	sharedFilePath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", "", -1)
+	if !FileExists(sharedFilePath) {
+		CreateFile(sharedFilePath)
 	}
+	return sharedFilePath
+}
 
-	if !FileExists(currentYearFile) {
-		success = success && CreateFile(currentYearFile)
+func GetCurrentYearFile() string {
+	currentYearFilePath := strings.Replace(models.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", time.Now().Year()), -1)
+	if !FileExists(currentYearFilePath) {
+		CreateFile(currentYearFilePath)
 	}
-
-	if !success {
-		return "", "", false
-	}
-	return commonFile, currentYearFile, true
+	return currentYearFilePath
 }
