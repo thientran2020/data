@@ -66,7 +66,7 @@ func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 }
 
 func GetSubscription() m.MySubscriptionList {
-	return ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
+	return ReadJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
 }
 
 func UpdateSubscriptionRecord() {
