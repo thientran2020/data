@@ -73,7 +73,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 *-s* &emsp;&nbsp;display current subscriptions' details <br/>
 
 ```
-➜ data get
+➜ data get -c
 
 			CATEGORY TABLE
 	|------|-----------------------------------------|
