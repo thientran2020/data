@@ -117,12 +117,12 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 
 	table.Footer = footer
 	table.SetStyle(style)
-	fmt.Println(Colorize(m.HEADER_LINE, Green))
 	table.Println()
 }
 
 func AddRecord(filepath string, record m.Record, color string) {
-	if CsvWrite(filepath, record) {
+	success := CsvWrite(filepath, record)
+	if success && color != "" {
 		PrintCustomizedMessage("Record has been successfully added at "+filepath, color, true)
 	}
 }

@@ -78,24 +78,44 @@ func UpdateSubscriptionRecord() {
 }
 
 func UpdateSubRecordByBCycle(data Data, subscriptions []m.Subscription, billingCycle string) {
+	yearMap := map[int]bool{}
 	for _, s := range subscriptions {
 		dateMap := FilterSubscriptionByName(data, s.Name)
 		generatedDateFromStartDate := GenerateDateFromStartDate(s.StartDate, billingCycle)
 		for _, date := range generatedDateFromStartDate {
 			if _, ok := dateMap[date]; !ok {
-				fmt.Println("Not in date map " + date)
-				day, month, year := GetDateNumber(date)
+				month, day, year := GetDateNumber(date)
+				var category string
+				switch s.Name {
+				case "Block":
+					category = "Income"
+				case "Monthly rent":
+					category = "Rent"
+				default:
+					category = "Subscription"
+				}
 				record := m.Record{
 					Year:        year,
 					Month:       month,
 					Day:         day,
 					Description: s.Name,
 					Cost:        s.Cost,
-					Category:    "Subscription",
+					Category:    category,
 					Code:        6,
 				}
-				PrintSingleRecord(record, Red)
+				yearMap[year] = true
+				AddRecord(GetSpecificYearFile(year), record, "")
+				AddRecord(GetSharedFile(), record, "")
 			}
 		}
+	}
+
+	if len(yearMap) == 0 {
+		return
+	}
+
+	for year := range yearMap {
+		CsvUpdate(GetSpecificYearFile(year))
+		CsvUpdate(GetSharedFile())
 	}
 }

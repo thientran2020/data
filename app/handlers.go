@@ -74,6 +74,10 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 }
 
 func HandleShow(showCmd *flag.FlagSet, month, year *int, current, income, expense *bool, keyword *string) {
+	// Update subscriptions
+	u.UpdateSubscriptionRecord()
+
+	// Handle Show command
 	showCmd.Parse(os.Args[2:])
 	if showCmd.NArg() != 0 {
 		showCmd.PrintDefaults()

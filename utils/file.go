@@ -169,6 +169,10 @@ func CsvUpdate(filepath string) {
 	}
 	defer file.Close()
 
+	// Add row headers for csv file
+	rowHeader := []string{"Year", "Month", "Day", "Content", "Cost", "Category", "Code"}
+	data = append([][]string{rowHeader}, data...)
+
 	writer := csv.NewWriter(file)
 	writer.WriteAll(data)
 	if err := writer.Error(); err != nil {

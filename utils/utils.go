@@ -184,6 +184,7 @@ func GetDateNumber(dateString string) (int, int, int) {
 // Filter []Record data based on month, type (income/expense) & keyword
 func FilterData(data Data, month int, typeFlag, keyword string) Data {
 	filteredData := Data{}
+	count := 0
 	for _, row := range data {
 		dateArray := strings.Split(row[1].(string), "-")
 		row_month, _ := strconv.Atoi(dateArray[0])
@@ -197,11 +198,13 @@ func FilterData(data Data, month int, typeFlag, keyword string) Data {
 
 		skip := skipRowByMonth || skipRowByTypeFlag || skipRowByKeyWord
 		if !skip {
+			count++
 			formatted_date := fmt.Sprintf("%s-%s-%s",
 				Colorize(dateArray[0], Yellow),
 				dateArray[1],
 				Colorize(dateArray[2], UGreen),
 			)
+			row[0] = count
 			row[1] = formatted_date
 			filteredData = append(filteredData, row)
 		}
@@ -210,11 +213,10 @@ func FilterData(data Data, month int, typeFlag, keyword string) Data {
 }
 
 func FilterSubscriptionByName(data Data, subscription string) map[string]bool {
-	// filterdData := Data{}
 	dateMap := map[string]bool{}
 	for _, row := range data {
-		if row[2].(string) == subscription && row[3].(string) == "Subscription" {
-			// filterdData = append(filterdData, row)
+		if row[2].(string) == subscription &&
+			(row[3].(string) == "Subscription" || row[3].(string) == "Rent" || row[3].(string) == "Income") {
 			dateMap[row[1].(string)] = true
 		}
 	}
