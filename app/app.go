@@ -6,9 +6,14 @@ import (
 	"os"
 
 	m "github.com/thientran2020/financial-cli/models"
+	"github.com/thientran2020/financial-cli/utils"
 )
 
 func AppInit() {
+	// Create "finance" folder to hold financial data if not exist
+	utils.CreateFolderIfNotExist(m.FINANCE_DIR)
+
+	// Create command sets
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	addSubscription := addCmd.Bool("s", false, m.AddSubscriptionMessage)
 

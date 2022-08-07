@@ -27,6 +27,18 @@ const (
 type Data [][]interface{}
 type String2D [][]string
 
+// Create folder if not exist
+func CreateFolderIfNotExist(path string) bool {
+	if !FileExists(path) {
+		err := os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			fmt.Printf("Error creating folder \"finance\": %v\n", err)
+			return false
+		}
+	}
+	return true
+}
+
 // file processing with os
 func FileExists(filepath string) bool {
 	file, err := os.Stat(filepath)
