@@ -3,10 +3,41 @@
 A great tool helps you manage your financial data ^^
 
 ### INSTALLATION
-
+1. Use `brew tap`
 ```
-git clone git@github.com:thientran2020/financial-cli.git
-cd financial-cli
+ ➜ brew tap thientran2020/homebrew-thientran2020
+==> Tapping thientran2020/thientran2020
+Cloning into '/opt/homebrew/Library/Taps/thientran2020/homebrew-thientran2020'...
+remote: Enumerating objects: 12, done.
+remote: Counting objects: 100% (12/12), done.
+remote: Compressing objects: 100% (9/9), done.
+remote: Total 12 (delta 1), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (12/12), done.
+Resolving deltas: 100% (1/1), done.
+Tapped 2 formulae (14 files, 9.4KB).
+
+ ➜ brew install thientran2020/thientran2020/data
+==> Downloading https://github.com/thientran2020/data/releases/download/v1.0.1/data_1.0.1_darwin_all.tar.gz
+==> Downloading from https://objects.githubusercontent.com/github-production-release-asset-2e65be/517206145/8a7451d2-2a33-4515-8c06
+######################################################################## 100.0%
+==> Installing data from thientran2020/thientran2020
+🍺  /opt/homebrew/Cellar/data/1.0.1: 4 files, 7.2MB, built in 1 second
+==> Running `brew cleanup data`...
+Disable this behaviour by setting HOMEBREW_NO_INSTALL_CLEANUP.
+Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`).
+
+ ➜ data help
+
+---------------------------------------------------------------------------------
+				FINANCIAL CLI
+   		 A great tool helps you manage your financial data ^^
+---------------------------------------------------------------------------------
+```
+
+2. Clone project to your local machine
+```
+git clone git@github.com:thientran2020/data.git
+cd data
 go build -o data main.go && export PATH=$(pwd):$PATH
 ```
 
