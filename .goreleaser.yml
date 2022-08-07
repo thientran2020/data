@@ -1,11 +1,14 @@
 builds:
-  - binary: data
+  - 
+    binary: data
     goos:
       - darwin
       - linux
     goarch:
       - amd64
       - arm64
+    goamd64:
+      - v1
     env:
       - CGO_ENABLED=0
     flags:
