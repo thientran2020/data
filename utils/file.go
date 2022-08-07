@@ -67,13 +67,7 @@ func CreateFile(filepath string) bool {
 
 // csv file processing
 func CsvWrite(filepath string, record m.Record) bool {
-	if !FileExists(filepath) {
-		CreateFile(filepath)
-		file, _ := os.OpenFile(filepath, os.O_WRONLY, 0644)
-		rowHeader := []string{"Year", "Month", "Day", "Content", "Cost", "Category", "Code"}
-		w := csv.NewWriter(file)
-		w.WriteAll([][]string{rowHeader})
-	}
+	newlyCreated := !FileExists(filepath)
 
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
@@ -90,9 +84,15 @@ func CsvWrite(filepath string, record m.Record) bool {
 		strconv.Itoa(record.Code),
 	}
 
+	var data String2D
+	if newlyCreated {
+		data = append([][]string{m.ROW_HEADER}, recordString)
+	} else {
+		data = [][]string{recordString}
+	}
+
 	writer := csv.NewWriter(file)
-	writer.Write(recordString)
-	writer.Flush()
+	writer.WriteAll(data)
 	return true
 }
 
@@ -189,8 +189,7 @@ func CsvUpdate(filepath string) {
 	defer file.Close()
 
 	// Add row headers for csv file
-	rowHeader := []string{"Year", "Month", "Day", "Content", "Cost", "Category", "Code"}
-	data = append([][]string{rowHeader}, data...)
+	data = append([][]string{m.ROW_HEADER}, data...)
 
 	writer := csv.NewWriter(file)
 	writer.WriteAll(data)

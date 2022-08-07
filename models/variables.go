@@ -2,6 +2,7 @@ package models
 
 var (
 	START_YEAR = 2017
+	ROW_HEADER = []string{"Year", "Month", "Day", "Content", "Cost", "Category", "Code"}
 	HEADERS    = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
 	LABELS     = map[string]map[string]string{
 		"Expense": {
