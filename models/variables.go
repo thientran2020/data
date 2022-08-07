@@ -1,10 +1,9 @@
 package models
 
 var (
-	START_YEAR  = 2017
-	FINANCE_DIR = "./finance"
-	HEADERS     = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
-	LABELS      = map[string]map[string]string{
+	START_YEAR = 2017
+	HEADERS    = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
+	LABELS     = map[string]map[string]string{
 		"Expense": {
 			"Description": "What did you spend money for",
 			"Cost":        "Nice. How much did you spend",
@@ -32,8 +31,8 @@ var (
 )
 
 const (
-	BASE_FILEPATH             = "./finance/finance<YEAR>.csv"
-	BASE_FILEPATH_SUBCRIPTION = "./finance/subscription.json"
+	BASE_FILEPATH             = "/finance/finance<YEAR>.csv"
+	BASE_FILEPATH_SUBCRIPTION = "/finance/subscription.json"
 	DASH                      = "+-----+-----+-----+------------------------------------+--------+-------------------+"
 
 	INSTRUCTION = `
@@ -48,15 +47,21 @@ COMMANDS
 	FLAGS:
 		-s: add subscription/membership data 
 		    this will be handled automatically based on its billing cycle
+	NOTE: 
+		This command will update subscriptions automatically.
+		Please run once if you see your subscriptions/memberships are not renewed yet in the financial table.
 
 	- data show
 	USAGE: display financial data in table format - current date by default 
 	FLAGS:
-		-m: specify month you want to retrive financial data 
+	  -i: show only income data
+		-e: show only expense data
+		-m: show only data filtered by specified month
 			Ex: 1, 2, 10,....
-		-y: specify year you want to retrive financial data
+		-y: show only data filtered by specified year
 			Ex: 2021, 2022,...
-		-h: print default instruction
+		-k: show only data filtered by specified keyword 
+		-h: show default instruction
 	
 	- data get
 	USAGE: get category mapping table or subscriptions' details

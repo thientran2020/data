@@ -8,7 +8,7 @@ import (
 )
 
 func AddSubscription() {
-	subscriptionList := ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
+	subscriptionList := ReadJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
 	name, _ := PromptEnter("What is your new subscription/membership", false)
@@ -69,7 +69,6 @@ func GetSubscription() m.MySubscriptionList {
 	return ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
 }
 
-// TODOs
 func UpdateSubscriptionRecord() {
 	data, _ := CsvRead(GetSharedFile())
 	subscriptions := GetSubscription()

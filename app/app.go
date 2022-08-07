@@ -11,7 +11,7 @@ import (
 
 func AppInit() {
 	// Create "finance" folder to hold financial data if not exist
-	utils.CreateFolderIfNotExist(m.FINANCE_DIR)
+	utils.CreateFolderIfNotExist()
 
 	// Create command sets
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)

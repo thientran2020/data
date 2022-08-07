@@ -27,13 +27,23 @@ const (
 type Data [][]interface{}
 type String2D [][]string
 
+// Get user's home directory
+func GetUserHomeDirectory() string {
+	userHomeDir, err := os.UserHomeDir()
+	if err != nil {
+		return ""
+	}
+	return userHomeDir
+}
+
 // Create folder if not exist
-func CreateFolderIfNotExist(path string) bool {
+func CreateFolderIfNotExist() bool {
+	path := GetUserHomeDirectory() + "/finance"
 	var err error
 	if !FileExists(path) {
 		err = os.Mkdir(path, os.ModePerm)
 	}
-	return err != nil
+	return path != "" || err != nil
 }
 
 // file processing with os
@@ -131,7 +141,7 @@ func ReadJson(filepath string) m.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		CreateFile(filepath)
-		fmt.Printf("Subcription list was created at %v\n", filepath)
+		// fmt.Printf("Subcription list was created at %v\n", filepath)
 		return ReadJson(filepath)
 	}
 	result := m.MySubscriptionList{}
@@ -151,7 +161,7 @@ func WriteJson(filepath string, subscriptionList m.MySubscriptionList) {
 // Return filepaths for all-in-one file "finance.csv" and current year file "finance_<year>.csv"
 // Check if files exist - if not create new ones
 func GetSharedFile() string {
-	sharedFilePath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", "", -1)
+	sharedFilePath := GetUserHomeDirectory() + strings.Replace(m.BASE_FILEPATH, "<YEAR>", "", -1)
 	if !FileExists(sharedFilePath) {
 		CreateFile(sharedFilePath)
 	}
@@ -159,7 +169,7 @@ func GetSharedFile() string {
 }
 
 func GetSpecificYearFile(year int) string {
-	currentYearFilePath := strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", year), -1)
+	currentYearFilePath := GetUserHomeDirectory() + strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", year), -1)
 	if !FileExists(currentYearFilePath) {
 		CreateFile(currentYearFilePath)
 	}

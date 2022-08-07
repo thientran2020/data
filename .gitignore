@@ -1,4 +1,2 @@
-finance/
-
-# workspace
-workspace.txt
+# ignore executable binary
+data
