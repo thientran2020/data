@@ -66,9 +66,18 @@ func CreateFile(filepath string) bool {
 }
 
 // csv file processing
-func CsvWrite(filepath string, record m.Record) bool {
-	newlyCreated := !FileExists(filepath)
+func CsvWriteHeader(filepath string) bool {
+	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		return false
+	}
+	writer := csv.NewWriter(file)
+	writer.Write(m.ROW_HEADER)
+	writer.Flush()
+	return true
+}
 
+func CsvWrite(filepath string, record m.Record) bool {
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		return false
@@ -84,15 +93,9 @@ func CsvWrite(filepath string, record m.Record) bool {
 		strconv.Itoa(record.Code),
 	}
 
-	var data String2D
-	if newlyCreated {
-		data = append([][]string{m.ROW_HEADER}, recordString)
-	} else {
-		data = [][]string{recordString}
-	}
-
 	writer := csv.NewWriter(file)
-	writer.WriteAll(data)
+	writer.Write(recordString)
+	writer.Flush()
 	return true
 }
 
@@ -111,7 +114,7 @@ func CsvRead(filepath string) (Data, String2D) {
 
 	count := 0
 	for {
-		row, _ := reader.Read()
+		row, err := reader.Read()
 		if err == io.EOF {
 			break
 		}
@@ -164,6 +167,7 @@ func GetSharedFile() string {
 	sharedFilePath := GetUserHomeDirectory() + strings.Replace(m.BASE_FILEPATH, "<YEAR>", "", -1)
 	if !FileExists(sharedFilePath) {
 		CreateFile(sharedFilePath)
+		CsvWriteHeader(sharedFilePath)
 	}
 	return sharedFilePath
 }
@@ -172,6 +176,7 @@ func GetSpecificYearFile(year int) string {
 	currentYearFilePath := GetUserHomeDirectory() + strings.Replace(m.BASE_FILEPATH, "<YEAR>", fmt.Sprintf("_%d", year), -1)
 	if !FileExists(currentYearFilePath) {
 		CreateFile(currentYearFilePath)
+		CsvWriteHeader(currentYearFilePath)
 	}
 	return currentYearFilePath
 }
