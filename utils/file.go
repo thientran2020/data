@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -95,14 +96,14 @@ func CsvRead(filepath string) (Data, String2D) {
 
 	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Printf("Error opening file %s", err)
+		log.Fatalf("Error opening file %s\n", err)
 	}
 	reader := csv.NewReader(file)
 
 	// discard the header
 	_, err = reader.Read()
 	if err != nil {
-		fmt.Printf("Error reading file %s", err)
+		log.Fatalf("Error reading file %s\n", err)
 	}
 
 	count := 0
@@ -112,7 +113,7 @@ func CsvRead(filepath string) (Data, String2D) {
 			break
 		}
 		if err != nil {
-			fmt.Printf("Error reading file %s", err)
+			log.Fatalf("Error reading file %s\n", err)
 		}
 
 		count++
@@ -154,7 +155,7 @@ func WriteJson(filepath string, subscriptionList m.MySubscriptionList) {
 	file, _ := json.MarshalIndent(subscriptionList, "", " ")
 	err := ioutil.WriteFile(filepath, file, 0644)
 	if err != nil {
-		fmt.Printf("Error writing subscription data %v\n", err)
+		log.Fatalf("Error writing subscription data %v\n", err)
 	}
 }
 
@@ -195,7 +196,7 @@ func CsvUpdate(filepath string) {
 	writer := csv.NewWriter(file)
 	writer.WriteAll(data)
 	if err := writer.Error(); err != nil {
-		fmt.Printf("Error overwriting at %s: %s", filepath, err)
+		log.Fatalf("Error overwriting at %s: %s\n", filepath, err)
 	}
 }
 
