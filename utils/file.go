@@ -29,14 +29,11 @@ type String2D [][]string
 
 // Create folder if not exist
 func CreateFolderIfNotExist(path string) bool {
+	var err error
 	if !FileExists(path) {
-		err := os.Mkdir(path, os.ModePerm)
-		if err != nil {
-			fmt.Printf("Error creating folder \"finance\": %v\n", err)
-			return false
-		}
+		err = os.Mkdir(path, os.ModePerm)
 	}
-	return true
+	return err != nil
 }
 
 // file processing with os
