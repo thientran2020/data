@@ -1,6 +1,5 @@
 builds:
-  - id: "data"
-    binary: financial-cli
+  - binary: data
     goos:
       - darwin
       - linux
@@ -23,8 +22,8 @@ brews:
     name: financial-cli
     homepage: https://github.com/thientran2020/financial-cli
     tap:
-      owner: financial-cli
-      name: homebrew-financial-cli
+      owner: thientran2020
+      name: homebrew-thientran2020
     commit_author:
       name: thientran
       email: thienytran14@gmail.com
