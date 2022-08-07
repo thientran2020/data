@@ -154,9 +154,9 @@ SHOW FINANCIAL DATA FOR 7/2022:
 + `data help` (used to show general instruction) <br/>
 
 ### WHERE ARE DATA SAVED?
-There are 2 types of csv files: <br/>
-- `./finance/finance.csv`: this holds all financial data. <br/>
-- `./finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
+There are 2 types of csv files at `$HOME/finance` <br/>
+- `~/finance/finance.csv`: this holds all financial data. <br/>
+- `~/finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
 - `./finance/subcriptions.json`: this holds all subscription/membership data .
 where all of these will be automatically updated based on their billing cycle.<br/>
  
