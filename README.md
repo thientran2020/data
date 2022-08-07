@@ -3,6 +3,7 @@
 A great tool helps you manage your financial data ^^
 
 ### INSTALLATION
+There are 2 ways: either use `brew tap` (recommended) or clone the project with `git`. </br>
 1. Use `brew tap`
 ```
  ➜ brew tap thientran2020/homebrew-thientran2020
