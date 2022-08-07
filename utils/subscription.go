@@ -68,3 +68,34 @@ func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 func GetSubscription() m.MySubscriptionList {
 	return ReadJson(m.BASE_FILEPATH_SUBCRIPTION)
 }
+
+// TODOs
+func UpdateSubscriptionRecord() {
+	data, _ := CsvRead(GetSharedFile())
+	subscriptions := GetSubscription()
+	UpdateSubRecordByBCycle(data, subscriptions.Monthly, "monthly")
+	UpdateSubRecordByBCycle(data, subscriptions.Yearly, "yearly")
+}
+
+func UpdateSubRecordByBCycle(data Data, subscriptions []m.Subscription, billingCycle string) {
+	for _, s := range subscriptions {
+		dateMap := FilterSubscriptionByName(data, s.Name)
+		generatedDateFromStartDate := GenerateDateFromStartDate(s.StartDate, billingCycle)
+		for _, date := range generatedDateFromStartDate {
+			if _, ok := dateMap[date]; !ok {
+				fmt.Println("Not in date map " + date)
+				day, month, year := GetDateNumber(date)
+				record := m.Record{
+					Year:        year,
+					Month:       month,
+					Day:         day,
+					Description: s.Name,
+					Cost:        s.Cost,
+					Category:    "Subscription",
+					Code:        6,
+				}
+				PrintSingleRecord(record, Red)
+			}
+		}
+	}
+}

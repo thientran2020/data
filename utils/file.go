@@ -117,34 +117,6 @@ func CsvRead(filepath string) (Data, String2D) {
 	return data, original_data
 }
 
-// Filter []Record data based on month, type (income/expense) & keyword
-func FilterData(data Data, month int, typeFlag, keyword string) Data {
-	filteredData := Data{}
-	for _, row := range data {
-		dateArray := strings.Split(row[1].(string), "-")
-		row_month, _ := strconv.Atoi(dateArray[0])
-		skipRowByMonth := month != -1 && row_month != month
-
-		skipRowByTypeFlag :=
-			(typeFlag == "income" && row[3] != "Income") ||
-				(typeFlag == "expense" && row[3] == "Income")
-
-		skipRowByKeyWord := !ContainString(row[2].(string), keyword) && !ContainString(row[3].(string), keyword)
-
-		skip := skipRowByMonth || skipRowByTypeFlag || skipRowByKeyWord
-		if !skip {
-			formatted_date := fmt.Sprintf("%s-%s-%s",
-				Colorize(dateArray[0], Yellow),
-				dateArray[1],
-				Colorize(dateArray[2], UGreen),
-			)
-			row[1] = formatted_date
-			filteredData = append(filteredData, row)
-		}
-	}
-	return filteredData
-}
-
 // JSON file processing
 func ReadJson(filepath string) m.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)

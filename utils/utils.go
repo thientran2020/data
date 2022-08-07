@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/manifoldco/promptui"
 )
@@ -136,6 +137,41 @@ func IsValidDate(dateString string) bool {
 	return re.MatchString(dateString)
 }
 
+func GenerateDateFromStartDate(startDate, billingCycle string) []string {
+	month, day, year := GetDateNumber(startDate)
+	generatedDate := []string{}
+
+	if billingCycle == "monthly" {
+		for y := year; y <= time.Now().Year(); y++ {
+			lower, upper := 1, 12
+			if y == year {
+				lower = month
+			}
+			if y == time.Now().Year() {
+				upper = int(time.Now().Month())
+			}
+			for m := lower; m <= upper; m++ {
+				newDate := fmt.Sprintf("%s-%s-%s",
+					GetStringDateFromNumber(m),
+					GetStringDateFromNumber(day),
+					GetStringDateFromNumber(y),
+				)
+				generatedDate = append(generatedDate, newDate)
+			}
+		}
+	} else if billingCycle == "yearly" {
+		for y := year; y <= time.Now().Year(); y++ {
+			newDate := fmt.Sprintf("%s-%s-%s",
+				GetStringDateFromNumber(month),
+				GetStringDateFromNumber(day),
+				GetStringDateFromNumber(y),
+			)
+			generatedDate = append(generatedDate, newDate)
+		}
+	}
+	return generatedDate
+}
+
 // Return date string with format "mm-dd-yyyy" to month, day, year numbers
 func GetDateNumber(dateString string) (int, int, int) {
 	date := strings.Split(dateString, "-")
@@ -143,6 +179,46 @@ func GetDateNumber(dateString string) (int, int, int) {
 	d, _ := strconv.Atoi(date[1])
 	y, _ := strconv.Atoi(date[2])
 	return m, d, y
+}
+
+// Filter []Record data based on month, type (income/expense) & keyword
+func FilterData(data Data, month int, typeFlag, keyword string) Data {
+	filteredData := Data{}
+	for _, row := range data {
+		dateArray := strings.Split(row[1].(string), "-")
+		row_month, _ := strconv.Atoi(dateArray[0])
+		skipRowByMonth := month != -1 && row_month != month
+
+		skipRowByTypeFlag :=
+			(typeFlag == "income" && row[3] != "Income") ||
+				(typeFlag == "expense" && row[3] == "Income")
+
+		skipRowByKeyWord := !ContainString(row[2].(string), keyword) && !ContainString(row[3].(string), keyword)
+
+		skip := skipRowByMonth || skipRowByTypeFlag || skipRowByKeyWord
+		if !skip {
+			formatted_date := fmt.Sprintf("%s-%s-%s",
+				Colorize(dateArray[0], Yellow),
+				dateArray[1],
+				Colorize(dateArray[2], UGreen),
+			)
+			row[1] = formatted_date
+			filteredData = append(filteredData, row)
+		}
+	}
+	return filteredData
+}
+
+func FilterSubscriptionByName(data Data, subscription string) map[string]bool {
+	// filterdData := Data{}
+	dateMap := map[string]bool{}
+	for _, row := range data {
+		if row[2].(string) == subscription && row[3].(string) == "Subscription" {
+			// filterdData = append(filterdData, row)
+			dateMap[row[1].(string)] = true
+		}
+	}
+	return dateMap
 }
 
 // Resolve terminal's bell ring issue when moving between interactive select
