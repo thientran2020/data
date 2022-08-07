@@ -1,4 +1,4 @@
-## FINANCIAL CLI
+## DATA - FINANCIAL CLI TOOL
 
 A great tool helps you manage your financial data ^^
 
