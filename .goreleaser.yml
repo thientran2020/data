@@ -1,6 +1,5 @@
 builds:
-  - 
-    binary: data
+  - binary: data
     goos:
       - darwin
       - linux
@@ -22,8 +21,8 @@ universal_binaries:
 
 brews:
   -
-    name: financial-cli
-    homepage: https://github.com/thientran2020/financial-cli
+    name: data
+    homepage: https://github.com/thientran2020/data
     tap:
       owner: thientran2020
       name: homebrew-thientran2020
