@@ -37,6 +37,12 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Travel
     Personal
     
+✔ Income
++-----+-----+-----+------------------------------------+--------+-------------------+
+|    08/07/2022   | ABC                                | $100   | Income            |
++-----+-----+-----+------------------------------------+--------+-------------------+
+? Do you confirm to enter above record? [y/N]
+
  ➜ data add -s
 Adding subscription....
 Subcription list was created at ./finance/subscription.json
@@ -44,7 +50,12 @@ What is your new subscription/membership: Costco
 ✔ Expense
 ✔ Monthly
 How much per billing period: 70
-Costco: $70/month
+What was the start date (mm-dd-yyyy):
+
+✔ Expense
++-----+-----+-----+------------------------------------+--------+-------------------+
+|    08/07/2022   | Costco                             | $70    | Expense           |
++-----+-----+-----+------------------------------------+--------+-------------------+
 ? Do you confirm to enter above subscription? [y/N]
 ```
 
@@ -54,6 +65,9 @@ Costco: $70/month
 *-m* &emsp;show only data filtered by specified month <br/>
 *-y* &emsp;&nbsp;show only data filtered by specified year <br/>
 *-k* &emsp;&nbsp;show only data filtered by specified keyword <br/>
+
+<ins>ESPECIALLY:</ins> This command will update subscriptions automatically. <br/> 
+Please run once if you see your subscriptions/memberships are not renewed yet in the financial table.
 
 ```
 ➜ data show -m=7 -i
