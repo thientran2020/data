@@ -1,0 +1,33 @@
+builds:
+  - id: "data"
+    binary: financial-cli
+    goos: 
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -mod=vendor
+
+release:
+  prerelease: auto
+
+universal_binaries:
+  - replace: true
+
+brews:
+  - 
+    name: data
+    homepage: https://github.com/thientran2020/financial-cli
+    tap:
+      owner: financial-cli
+      name: homebrew-data
+    commit_author:
+      name: thientran
+      email: thienytran14@gmail.com
+
+checksum:
+  name_template: 'checksums.txt'
