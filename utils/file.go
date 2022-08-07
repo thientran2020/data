@@ -67,9 +67,16 @@ func CreateFile(filepath string) bool {
 
 // csv file processing
 func CsvWrite(filepath string, record m.Record) bool {
+	if !FileExists(filepath) {
+		CreateFile(filepath)
+		file, _ := os.OpenFile(filepath, os.O_WRONLY, 0644)
+		rowHeader := []string{"Year", "Month", "Day", "Content", "Cost", "Category", "Code"}
+		w := csv.NewWriter(file)
+		w.WriteAll([][]string{rowHeader})
+	}
+
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
-		fmt.Println("Cannot open file to write ", err)
 		return false
 	}
 
