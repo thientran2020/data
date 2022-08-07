@@ -101,9 +101,6 @@ func CsvRead(filepath string) (Data, String2D) {
 
 	// discard the header
 	_, err = reader.Read()
-	if err != nil {
-		fmt.Printf("Error reading file header %s\n", err)
-	}
 
 	count := 0
 	for {
@@ -138,7 +135,6 @@ func ReadJson(filepath string) m.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		CreateFile(filepath)
-		// fmt.Printf("Subcription list was created at %v\n", filepath)
 		return ReadJson(filepath)
 	}
 	result := m.MySubscriptionList{}
