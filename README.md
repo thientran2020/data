@@ -145,8 +145,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 There are 2 types of csv files at `$HOME/finance` <br/>
 - `~/finance/finance.csv`: this holds all financial data. <br/>
 - `~/finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
-- `~/finance/subcriptions.json`: this holds all subscription/membership data .
-where all of these will be automatically updated based on their billing cycle.<br/>
+- `~/finance/subcriptions.json`: this holds all subscription/membership data (ex: monthly rent, Costco membership,...) where all of these will be automatically updated based on their billing cycle.<br/>
  
 
 ```
