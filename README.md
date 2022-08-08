@@ -4,35 +4,23 @@ A great tool helps you manage your financial data ^^
 
 ### INSTALLATION
 There are 2 ways: either use `brew tap` (recommended) or clone the project with `git`. </br>
-1. Use `brew tap`
+1. Use `brew tap`. Open your terminal, run the following commands:
 ```
  ➜ brew tap thientran2020/homebrew-thientran2020
-==> Tapping thientran2020/thientran2020
-Cloning into '/opt/homebrew/Library/Taps/thientran2020/homebrew-thientran2020'...
-remote: Enumerating objects: 12, done.
-remote: Counting objects: 100% (12/12), done.
-remote: Compressing objects: 100% (9/9), done.
-remote: Total 12 (delta 1), reused 0 (delta 0), pack-reused 0
-Receiving objects: 100% (12/12), done.
-Resolving deltas: 100% (1/1), done.
-Tapped 2 formulae (14 files, 9.4KB).
+```
 
+```
  ➜ brew install thientran2020/thientran2020/data
-==> Downloading https://github.com/thientran2020/data/releases/download/v1.0.1/data_1.0.1_darwin_all.tar.gz
-==> Downloading from https://objects.githubusercontent.com/github-production-release-asset-2e65be/517206145/8a7451d2-2a33-4515-8c06
-######################################################################## 100.0%
-==> Installing data from thientran2020/thientran2020
-🍺  /opt/homebrew/Cellar/data/1.0.1: 4 files, 7.2MB, built in 1 second
-==> Running `brew cleanup data`...
-Disable this behaviour by setting HOMEBREW_NO_INSTALL_CLEANUP.
-Hide these hints with HOMEBREW_NO_ENV_HINTS (see `man brew`).
-
+```
+Verify if it was already installed successfully:
+```
  ➜ data help
 
 ---------------------------------------------------------------------------------
 				FINANCIAL CLI
    		 A great tool helps you manage your financial data ^^
 ---------------------------------------------------------------------------------
+.....
 ```
 
 2. Clone project to your local machine
@@ -157,12 +145,12 @@ SHOW FINANCIAL DATA FOR 7/2022:
 There are 2 types of csv files at `$HOME/finance` <br/>
 - `~/finance/finance.csv`: this holds all financial data. <br/>
 - `~/finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
-- `./finance/subcriptions.json`: this holds all subscription/membership data .
+- `~/finance/subcriptions.json`: this holds all subscription/membership data .
 where all of these will be automatically updated based on their billing cycle.<br/>
  
 
 ```
-➜ ls -l ./finance
+➜ ls -l ~/finance
 -rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance.csv
 -rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance_2022.csv
 ```
