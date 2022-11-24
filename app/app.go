@@ -1,55 +1,55 @@
 package app
 
 import (
-	"flag"
 	"fmt"
-	"os"
 
+	"github.com/alecthomas/kong"
 	m "github.com/thientran2020/financial-cli/models"
-	"github.com/thientran2020/financial-cli/utils"
 )
 
-func AppInit() {
-	// Create "finance" folder to hold financial data if not exist
-	utils.CreateFolderIfNotExist()
+type CLI struct {
+	Add struct {
+		Subscription bool `optional:"" short:"s" help:"Add subscription/membership data"`
+	} `cmd:"" help:"Add financial data (expense or income)"`
+	Get struct {
+		Category     bool `optional:"" short:"c" help:"Display category mapping table"`
+		Subscription bool `optional:"" short:"s" help:"Display current subscriptions' details"`
+	} `cmd:"" help:"Get category mapping table or subscriptions' details"`
+	Show struct {
+		Current bool   `optional:"" short:"c" help:"Retrieve current month data"`
+		Month   int    `optional:"" short:"m" help:"Retrive financial data for specific month"`
+		Year    int    `optional:"" short:"y" help:"Retrive financial data for specific year"`
+		Income  bool   `optional:"" short:"i" help:"Retrive income data"`
+		Expense bool   `optional:"" short:"e" help:"Retrive expense data"`
+		Keyword string `optional:"" short:"k" help:"Retrive financial data by filtering specific keyword"`
+	} `cmd:"" help:"Display financial data in table format - current date by default "`
+	Search struct {
+		Keyword string `arg:"" required:"" help:"Keyword to search. For example: restaurant, travel,..."`
+	} `cmd:"" help:"Display financial data by specific keyword"`
+}
 
-	// Create command sets
-	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-	addSubscription := addCmd.Bool("s", false, m.AddSubscriptionMessage)
-
-	showCmd := flag.NewFlagSet("show", flag.ExitOnError)
-	showCurrent := showCmd.Bool("c", false, m.ShowCurrentMessage)
-	showMonth := showCmd.Int("m", -1, m.ShowMonthMessage)
-	showYear := showCmd.Int("y", -1, m.ShowYearMessage)
-	showIncome := showCmd.Bool("i", false, m.ShowIncomeMessage)
-	showExpense := showCmd.Bool("e", false, m.ShowExpenseMessage)
-	showKeyword := showCmd.String("k", "", m.ShowKeywordMessage)
-
-	helpCmd := flag.NewFlagSet("help", flag.ExitOnError)
-
-	getCmd := flag.NewFlagSet("get", flag.ExitOnError)
-	getCategory := getCmd.Bool("c", false, m.GetCategoryMessage)
-	getSubscription := getCmd.Bool("s", false, m.GetSubscriptionMessage)
-
-	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
-
-	if len(os.Args) < 2 {
-		fmt.Println("Expected at least 1 subcommand")
-		os.Exit(1)
-	}
-
-	switch os.Args[1] {
+func (cmd *CLI) Run(ctx *kong.Context) error {
+	switch ctx.Command() {
 	case "add":
-		HandleAdd(addCmd, addSubscription)
-	case "show":
-		HandleShow(showCmd, showMonth, showYear, showCurrent, showIncome, showExpense, showKeyword)
-	case "help":
-		HandleHelp(helpCmd)
+		HandleAdd(cmd)
 	case "get":
-		HandleGet(getCmd, getCategory, getSubscription)
-	case "search":
-		HandleSearch(searchCmd)
+		if len(ctx.Args) == 1 {
+			fmt.Print(m.INSTRUCTION)
+		}
+		HandleGet(cmd)
+	case "show":
+		HandleShow(cmd)
+	case "search <keyword>":
+		HandleSearch(ctx.Args[1])
 	default:
-		fmt.Print(m.INSTRUCTION)
+		panic(ctx.Command())
 	}
+	return nil
+}
+
+func AppInit() {
+	var cli CLI
+	ctx := kong.Parse(&cli)
+	err := ctx.Run()
+	ctx.FatalIfErrorf(err)
 }
