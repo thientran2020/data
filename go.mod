@@ -3,6 +3,7 @@ module github.com/thientran2020/financial-cli
 go 1.18
 
 require (
+	github.com/alecthomas/kong v0.7.1
 	github.com/alexeyco/simpletable v1.0.0
 	github.com/manifoldco/promptui v0.9.0
 )

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -132,9 +131,10 @@ func Colorize(text string, color string) string {
 	return fmt.Sprintf("%s%s%s", color, text, ColorOff)
 }
 
+// date format: mm-dd-yyyy
 func IsValidDate(dateString string) bool {
-	re := regexp.MustCompile("(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)")
-	return re.MatchString(dateString)
+	_, err := time.Parse("01-02-2006", dateString)
+	return err == nil
 }
 
 func GenerateDateFromStartDate(startDate, billingCycle string) []string {
@@ -188,7 +188,7 @@ func FilterData(data Data, month int, typeFlag, keyword string) Data {
 	for _, row := range data {
 		dateArray := strings.Split(row[1].(string), "-")
 		row_month, _ := strconv.Atoi(dateArray[0])
-		skipRowByMonth := month != -1 && row_month != month
+		skipRowByMonth := month != 0 && row_month != month
 
 		skipRowByTypeFlag :=
 			(typeFlag == "income" && row[3] != "Income") ||

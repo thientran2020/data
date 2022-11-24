@@ -1,10 +1,7 @@
 package app
 
 import (
-	"flag"
 	"fmt"
-	"os"
-	"strings"
 	"time"
 
 	"github.com/alexeyco/simpletable"
@@ -12,14 +9,8 @@ import (
 	u "github.com/thientran2020/financial-cli/utils"
 )
 
-func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
-	addCmd.Parse(os.Args[2:])
-	if addCmd.NArg() != 0 {
-		addCmd.PrintDefaults()
-		os.Exit(1)
-	}
-
-	if *sub == true {
+func HandleAdd(cmd *CLI) {
+	if cmd.Add.Subscription == true {
 		u.AddSubscription()
 		return
 	}
@@ -73,31 +64,31 @@ func HandleAdd(addCmd *flag.FlagSet, sub *bool) {
 	}
 }
 
-func HandleShow(showCmd *flag.FlagSet, month, year *int, current, income, expense *bool, keyword *string) {
+func HandleShow(cmd *CLI) {
 	// Update subscriptions
 	u.UpdateSubscriptionRecord()
 
-	// Handle Show command
-	showCmd.Parse(os.Args[2:])
-	if showCmd.NArg() != 0 {
-		showCmd.PrintDefaults()
-		os.Exit(1)
-	}
+	year := cmd.Show.Year
+	month := cmd.Show.Month
+	current := cmd.Show.Current
+	income := cmd.Show.Income
+	expense := cmd.Show.Expense
+	keyword := cmd.Show.Keyword
 
-	if *year != -1 && (*year < m.START_YEAR || *year > time.Now().Year()) {
+	if year != 0 && (year < m.START_YEAR || year > time.Now().Year()) {
 		fmt.Println(u.Colorize("No data found for the requested year...!", u.Red))
 		return
 	}
 
-	if *current == true {
-		*month = int(time.Now().Month())
-		*year = time.Now().Year()
+	if current == true {
+		month = int(time.Now().Month())
+		year = time.Now().Year()
 	}
 
 	var flag string
-	if *income == true && *expense == false {
+	if income == true && expense == false {
 		flag = "income"
-	} else if *income == false && *expense == true {
+	} else if income == false && expense == true {
 		flag = "expense"
 	} else {
 		flag = "all"
@@ -105,40 +96,23 @@ func HandleShow(showCmd *flag.FlagSet, month, year *int, current, income, expens
 
 	// Choose file for retrieving financial data
 	filepath := u.GetSharedFile()
-	if *year >= m.START_YEAR && *year <= time.Now().Year() {
-		filepath = u.GetSpecificYearFile(*year)
+	if year >= m.START_YEAR && year <= time.Now().Year() {
+		filepath = u.GetSpecificYearFile(year)
 	}
 
 	// Retrieve, filter and display data
 	data, _ := u.CsvRead(filepath)
-	filteredData := u.FilterData(data, *month, flag, *keyword)
+	filteredData := u.FilterData(data, month, flag, keyword)
 	u.PrintTable(filteredData, m.HEADERS, flag, simpletable.StyleDefault)
 }
 
-func HandleHelp(helpCmd *flag.FlagSet) {
-	helpCmd.Parse(os.Args[2:])
-
-	if helpCmd.NFlag() > 0 || helpCmd.NArg() > 0 {
-		fmt.Println("Please don't specific any argument/flag.")
-		fmt.Println("Correct usage: 'data help'")
-		return
-	}
-	fmt.Print(m.INSTRUCTION)
-}
-
-func HandleGet(getCmd *flag.FlagSet, getCategory, getSubscription *bool) {
-	getCmd.Parse(os.Args[2:])
-	if getCmd.NArg() > 0 || getCmd.NFlag() != 1 {
-		getCmd.PrintDefaults()
-		os.Exit(1)
-	}
-
-	if *getCategory == true {
+func HandleGet(cmd *CLI) {
+	if cmd.Get.Category == true {
 		u.PrintCustomizedMessage(m.CATEGORY_TABLE, u.White, true)
 		return
 	}
 
-	if *getSubscription == true {
+	if cmd.Get.Subscription == true {
 		data := u.GetSubscription()
 		u.PrintSubcriptionList("monthly", data.Monthly)
 		u.PrintSubcriptionList("yearly", data.Yearly)
@@ -147,16 +121,8 @@ func HandleGet(getCmd *flag.FlagSet, getCategory, getSubscription *bool) {
 	}
 }
 
-func HandleSearch(searchCmd *flag.FlagSet) {
-	searchCmd.Parse(os.Args[2:])
-
-	if searchCmd.NArg() < 1 {
-		fmt.Println("Please specific keyword. Correct usage: 'data search keyword'")
-		return
-	}
-
-	keyword := strings.Join(os.Args[2:], " ")
+func HandleSearch(keyword string) {
 	data, _ := u.CsvRead(u.GetSharedFile())
-	filteredData := u.FilterData(data, -1, "all", keyword)
+	filteredData := u.FilterData(data, 0, "all", keyword)
 	u.PrintTable(filteredData, m.HEADERS, "all", simpletable.StyleDefault)
 }
