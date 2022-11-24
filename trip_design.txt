@@ -1,0 +1,12 @@
+data add --date
+
+data trip (list)
+
+data trip add
+- # of people
+- trip name
+- principal
+- expense (who, date, details, shared flag - whos)
+- print details
+
+data trip search --key
