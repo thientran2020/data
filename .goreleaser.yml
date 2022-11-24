@@ -6,12 +6,14 @@ builds:
     goarch:
       - amd64
       - arm64
+      - arm
     goamd64:
       - v1
     env:
       - CGO_ENABLED=0
     flags:
       - -mod=vendor
+      - -trimpath
 
 release:
   prerelease: auto
