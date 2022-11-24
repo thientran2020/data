@@ -10,7 +10,7 @@ import (
 )
 
 func HandleAdd(cmd *CLI) {
-	if cmd.Add.Subscription == true {
+	if cmd.Add.Subscription {
 		u.AddSubscription()
 		return
 	}
@@ -80,15 +80,15 @@ func HandleShow(cmd *CLI) {
 		return
 	}
 
-	if current == true {
+	if current {
 		month = int(time.Now().Month())
 		year = time.Now().Year()
 	}
 
 	var flag string
-	if income == true && expense == false {
+	if income && !expense {
 		flag = "income"
-	} else if income == false && expense == true {
+	} else if !income && expense {
 		flag = "expense"
 	} else {
 		flag = "all"
@@ -107,12 +107,14 @@ func HandleShow(cmd *CLI) {
 }
 
 func HandleGet(cmd *CLI) {
-	if cmd.Get.Category == true {
+	if !cmd.Get.Subscription && !cmd.Get.Category {
+		fmt.Print(m.INSTRUCTION)
+	}
+	if cmd.Get.Category {
 		u.PrintCustomizedMessage(m.CATEGORY_TABLE, u.White, true)
 		return
 	}
-
-	if cmd.Get.Subscription == true {
+	if cmd.Get.Subscription {
 		data := u.GetSubscription()
 		u.PrintSubcriptionList("monthly", data.Monthly)
 		u.PrintSubcriptionList("yearly", data.Yearly)

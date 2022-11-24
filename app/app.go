@@ -1,10 +1,7 @@
 package app
 
 import (
-	"fmt"
-
 	"github.com/alecthomas/kong"
-	m "github.com/thientran2020/financial-cli/models"
 )
 
 type CLI struct {
@@ -33,9 +30,6 @@ func (cmd *CLI) Run(ctx *kong.Context) error {
 	case "add":
 		HandleAdd(cmd)
 	case "get":
-		if len(ctx.Args) == 1 {
-			fmt.Print(m.INSTRUCTION)
-		}
 		HandleGet(cmd)
 	case "show":
 		HandleShow(cmd)
