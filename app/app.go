@@ -7,10 +7,12 @@ import (
 type CLI struct {
 	Add struct {
 		Subscription bool `optional:"" short:"s" help:"Add subscription/membership data"`
+		Trip         bool `optional:"" short:"t" help:"Add new trip"`
 	} `cmd:"" help:"Add financial data (expense or income)"`
 	Get struct {
 		Category     bool `optional:"" short:"c" help:"Display category mapping table"`
 		Subscription bool `optional:"" short:"s" help:"Display current subscriptions' details"`
+		Trip         bool `optional:"" short:"t" help:"List all trips in interactive shell for details"`
 	} `cmd:"" help:"Get category mapping table or subscriptions' details"`
 	Show struct {
 		Current bool   `optional:"" short:"c" help:"Retrieve current month data"`

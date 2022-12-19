@@ -36,6 +36,7 @@ go build -o data main.go && export PATH=$(pwd):$PATH
 
 ```
 ➜ data add
+Enter date: : 12-19-2022
 Use the arrow keys to navigate: ↓ ↑ → ←
 ? What type of financial data are you entering:
   ▸ Income
@@ -134,6 +135,8 @@ SHOW FINANCIAL DATA FOR 7/2022:
 	|  10  |  Travel                                 |
 	|------|-----------------------------------------|
 	|  11  |  Personal                               |
+	|------|-----------------------------------------|
+	|  12  |  Trip                                   |
 	|------|-----------------------------------------|
 ```
 
