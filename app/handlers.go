@@ -15,8 +15,18 @@ func HandleAdd(cmd *CLI) {
 		return
 	}
 
-	// Get current date
-	year, month, day := time.Now().Date()
+	if cmd.Add.Trip {
+		u.AddNewTrip()
+		return
+	}
+
+	// Get date - default is current date
+	var year, month, day int
+	var date string
+	if date, _ = u.DateEnter("Enter date: "); date == "" {
+		date = time.Now().Format("01-02-2006")
+	}
+	month, day, year = u.GetDateNumber(date)
 
 	// Prompt to input data
 	// 1. Check data entered is for expense or income
@@ -51,16 +61,16 @@ func HandleAdd(cmd *CLI) {
 		Category:    category,
 		Code:        code,
 	}
-	u.PrintSingleRecord(record, u.Green)
 
-	// Confirm record and enter to files
-	if u.ConfirmYesNoPromt("Do you confirm to enter above record") {
-		sharedFile := u.GetSharedFile()
-		currentYearFile := u.GetSpecificYearFile(time.Now().Year())
-		u.AddRecord(sharedFile, record, u.Yellow)
-		u.AddRecord(currentYearFile, record, u.Red)
+	if record.Category == "Trip" {
+		u.AddTripRecord(record)
 	} else {
-		u.PrintCustomizedMessage("Record ignored "+u.CheckMark, u.Red, true)
+		u.PrintSingleRecord(record, u.Green)
+		if u.ConfirmYesNoPromt("Do you confirm to enter above record") {
+			u.AddRecord(record)
+		} else {
+			u.PrintCustomizedMessage("Record ignored "+u.CheckMark, u.Red, true)
+		}
 	}
 }
 
@@ -107,19 +117,17 @@ func HandleShow(cmd *CLI) {
 }
 
 func HandleGet(cmd *CLI) {
-	if !cmd.Get.Subscription && !cmd.Get.Category {
+	if cmd.Get.Trip {
+		u.PritnTrip()
+	} else if !cmd.Get.Subscription && !cmd.Get.Category {
 		fmt.Print(m.INSTRUCTION)
-	}
-	if cmd.Get.Category {
-		u.PrintCustomizedMessage(m.CATEGORY_TABLE, u.White, true)
-		return
-	}
-	if cmd.Get.Subscription {
+	} else if cmd.Get.Category {
+		u.PrintCustomizedMessage(m.CATEGORY_TABLE, u.ColorOff, true)
+	} else if cmd.Get.Subscription {
 		data := u.GetSubscription()
 		u.PrintSubcriptionList("monthly", data.Monthly)
 		u.PrintSubcriptionList("yearly", data.Yearly)
 		fmt.Println()
-		return
 	}
 }
 

@@ -8,7 +8,7 @@ import (
 )
 
 func AddSubscription() {
-	subscriptionList := ReadJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
+	subscriptionList := ReadSubscriptionJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
 	name, _ := PromptEnter("What is your new subscription/membership", false)
@@ -48,7 +48,7 @@ func AddSubscription() {
 	PrintCustomizedMessage(message, Green, true)
 	confirmed := ConfirmYesNoPromt("Do you confirm to enter above subscription")
 	if confirmed {
-		WriteJson(m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
+		WriteSubscriptionJson(m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
 		PrintCustomizedMessage("Successfully added at "+m.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
 	} else {
 		PrintCustomizedMessage("Subscription ignored "+CheckMark, Red, true)
@@ -66,7 +66,7 @@ func PrintSubcriptionList(billingCycle string, subcriptions []m.Subscription) {
 }
 
 func GetSubscription() m.MySubscriptionList {
-	return ReadJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
+	return ReadSubscriptionJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
 }
 
 func UpdateSubscriptionRecord() {
@@ -103,8 +103,8 @@ func UpdateSubRecordByBCycle(data Data, subscriptions []m.Subscription, billingC
 					Code:        6,
 				}
 				yearMap[year] = true
-				AddRecord(GetSpecificYearFile(year), record, "")
-				AddRecord(GetSharedFile(), record, "")
+				AddRecordToFile(GetSpecificYearFile(year), record, "")
+				AddRecordToFile(GetSharedFile(), record, "")
 			}
 		}
 	}

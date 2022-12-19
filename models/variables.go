@@ -28,13 +28,15 @@ var (
 		"Merchandise",
 		"Travel",
 		"Personal",
+		"Trip",
 	}
 )
 
 const (
 	BASE_FILEPATH             = "/finance/finance<YEAR>.csv"
 	BASE_FILEPATH_SUBCRIPTION = "/finance/subscription.json"
-	DASH                      = "+-----+-----+-----+------------------------------------+--------+-------------------+"
+	BASE_FILEPATH_TRIP        = "/finance/trip.json"
+	DASH                      = "+-----+-----+-----+---------------------------------------+--------+-------------------+"
 
 	INSTRUCTION = `
 ---------------------------------------------------------------------------------
@@ -48,6 +50,7 @@ COMMANDS
 	FLAGS:
 		-s: add subscription/membership data 
 		    this will be handled automatically based on its billing cycle
+		-t: add new trip
 	NOTE: 
 		This command will update subscriptions automatically.
 		Please run once if you see your subscriptions/memberships are not renewed yet in the financial table.
@@ -63,12 +66,15 @@ COMMANDS
 			Ex: 2021, 2022,...
 		-k: show only data filtered by specified keyword 
 		-h: show default instruction
+		-t: show financial data for specific trip
+			Ex: data show -t florida 
 	
 	- data get
 	USAGE: get category mapping table or subscriptions' details
 	FLAGS:
 		-c: display category map for specific details
 		-s: display subscriptions' details
+		-t: display all trips
 	
 	- data search <keyword>
 	USAGE: search specific financial key
@@ -106,6 +112,7 @@ COMMANDS
 	|------|-----------------------------------------|
 	|  11  |  Personal                               |
 	|------|-----------------------------------------|
-
+	|  12  |  Trip                                   |
+	|------|-----------------------------------------|
 `
 )

@@ -141,11 +141,11 @@ func CsvRead(filepath string) (Data, String2D) {
 }
 
 // JSON file processing
-func ReadJson(filepath string) m.MySubscriptionList {
+func ReadSubscriptionJson(filepath string) m.MySubscriptionList {
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		CreateFile(filepath)
-		return ReadJson(filepath)
+		return ReadSubscriptionJson(filepath)
 	}
 	result := m.MySubscriptionList{}
 
@@ -153,7 +153,7 @@ func ReadJson(filepath string) m.MySubscriptionList {
 	return result
 }
 
-func WriteJson(filepath string, subscriptionList m.MySubscriptionList) {
+func WriteSubscriptionJson(filepath string, subscriptionList m.MySubscriptionList) {
 	file, _ := json.MarshalIndent(subscriptionList, "", " ")
 	err := ioutil.WriteFile(filepath, file, 0644)
 	if err != nil {

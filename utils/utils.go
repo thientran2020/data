@@ -98,6 +98,26 @@ func PromptEnter(label string, empty bool) (string, error) {
 	return result, err
 }
 
+func DateEnter(label string) (string, error) {
+	validate := func(input string) error {
+		if len(input) == 0 {
+			return nil
+		}
+		if len(input) != 0 && !IsValidDate(input) {
+			return errors.New("Invalid date. Please enter with format mm-dd-yyyy...")
+		}
+		return nil
+	}
+
+	prompt := promptui.Prompt{
+		Label:    label,
+		Validate: validate,
+	}
+
+	result, err := prompt.Run()
+	return result, err
+}
+
 // Print customized messages with color
 func PrintCustomizedMessage(message string, color string, newline bool) {
 	message = strings.ReplaceAll(message, ColorOff, "")
