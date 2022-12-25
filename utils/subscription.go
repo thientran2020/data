@@ -48,8 +48,8 @@ func AddSubscription() {
 	PrintCustomizedMessage(message, Green, true)
 	confirmed := ConfirmYesNoPromt("Do you confirm to enter above subscription")
 	if confirmed {
-		WriteSubscriptionJson(m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
-		PrintCustomizedMessage("Successfully added at "+m.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
+		WriteSubscriptionJson(GetUserHomeDirectory()+m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
+		PrintCustomizedMessage("Successfully added at "+GetUserHomeDirectory()+m.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
 	} else {
 		PrintCustomizedMessage("Subscription ignored "+CheckMark, Red, true)
 	}
