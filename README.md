@@ -57,8 +57,8 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Merchandise
     Travel
     Personal
-		Trip
-    
+    Trip
+
 ✔ Income
 +-----+-----+-----+------------------------------------+--------+-------------------+
 |    08/07/2022   | ABC                                | $100   | Income            |
