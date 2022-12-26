@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"sort"
+	"strconv"
 	"strings"
-	"time"
 
 	"github.com/alexeyco/simpletable"
 	m "github.com/thientran2020/financial-cli/models"
@@ -13,15 +14,10 @@ import (
 
 func AddNewTrip() {
 	// interactive shell for information
-	var tripName, startDate, endDate string
-	tripName, _ = PromptEnter("Where do you visit", false)
-	numOfParticipants, _ := NumberEnter("How many participants are there")
-	if startDate, _ = DateEnter("When does your trip start (default is today's date)"); startDate == "" {
-		startDate = time.Now().Format("01-02-2006")
-	}
-	if endDate, _ = DateEnter("When does your trip end (default is today's date)"); endDate == "" {
-		endDate = time.Now().Format("01-02-2006")
-	}
+	tripName := PromptEnter("Where do you visit")
+	numOfParticipants := NumberEnter("How many participants are there")
+	startDate := DateEnter("When does your trip start (default is today's date)")
+	endDate := DateEnter("When does your trip end (default is today's date)")
 
 	// Create new trip, append to existing list and overwrite new file "trip.json" if existed
 	trips := ReadTripJson(GetUserHomeDirectory() + m.BASE_FILEPATH_TRIP)
@@ -50,7 +46,7 @@ func AddTripRecord(record m.Record) {
 	for _, trip := range trips {
 		tripsList = append(tripsList, trip.Name)
 	}
-	selected, _ := InteractiveSelect("What trip you would like to add financial data", tripsList)
+	selected := InteractiveSelect("What trip you would like to add financial data", tripsList)
 	shared := ConfirmYesNoPromt("Is it financially shared")
 
 	for i := range trips {
@@ -104,36 +100,51 @@ func PritnTrip() {
 	for _, trip := range trips {
 		tripsList = append(tripsList, trip.Name)
 	}
-	selected, _ := InteractiveSelect("What trip you would like to add financial data", tripsList)
-	data := Data{}
+	selected := InteractiveSelect("What trip you would like to add financial data", tripsList)
+	data := String2D{}
 	for i := range trips {
 		if trips[i].Name != selected {
 			continue
 		}
-		for i, record := range trips[i].Records {
-			formatted_date := fmt.Sprintf("%s-%s-%s",
-				Colorize(GetStringDateFromNumber(record.Month), Yellow),
-				GetStringDateFromNumber(record.Day),
-				Colorize(GetStringDateFromNumber(record.Year), UGreen),
-			)
+		for _, record := range trips[i].Records {
 			category := record.Category
 			if record.Shared {
 				category += " (shared)"
 			}
-			row := []interface{}{
-				i,
-				formatted_date,
+			row := []string{
+				strconv.Itoa(record.Year),
+				strconv.Itoa(record.Month),
+				strconv.Itoa(record.Day),
 				record.Description,
 				category,
-				record.Cost,
+				strconv.Itoa(record.Cost),
 			}
 			data = append(data, row)
 		}
 	}
+	sort.Sort(data)
+
+	tableData := Data{}
+	for i, row := range data {
+		formatted_date := fmt.Sprintf("%s-%s-%s",
+			Colorize(GetStringDateFromString(row[month]), Yellow),
+			GetStringDateFromString(row[day]),
+			Colorize(GetStringDateFromString(row[year]), UGreen),
+		)
+		cost, _ := strconv.Atoi(row[5])
+		tableRow := []interface{}{
+			i,
+			formatted_date,
+			row[3],
+			row[4],
+			cost,
+		}
+		tableData = append(tableData, tableRow)
+	}
 
 	// Display trip as table
-	intro := fmt.Sprintf("__________[%s] TRIP_________\n", strings.ToUpper(selected))
+	intro := fmt.Sprintf("__________TRIP TO %s_________\n", strings.ToUpper(selected))
 	headers := []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
-	PrintCustomizedMessage(intro, Red, true)
-	PrintTable(data, headers, "trip", simpletable.StyleDefault)
+	PrintCustomizedMessage("\n"+CenterString(intro, len(m.DASH)), Red, true)
+	PrintTable(tableData, headers, "trip", simpletable.StyleDefault)
 }

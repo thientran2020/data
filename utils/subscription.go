@@ -11,17 +11,17 @@ func AddSubscription() {
 	subscriptionList := ReadSubscriptionJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
-	name, _ := PromptEnter("What is your new subscription/membership", false)
-	ftype, _ := InteractiveSelect(
+	name := PromptEnter("What is your new subscription/membership")
+	ftype := InteractiveSelect(
 		"What type of your subscription",
 		[]string{"income", "expense"},
 	)
-	billingCycle, _ := InteractiveSelect(
+	billingCycle := InteractiveSelect(
 		"Choose your billing cycle",
 		[]string{"monthly", "yearly"},
 	)
-	cost, _ := NumberEnter("How much per billing period")
-	startDate, _ := PromptEnter("What was the start date (mm-dd-yyyy)", false)
+	cost := NumberEnter("How much per billing period")
+	startDate := PromptEnter("What was the start date (mm-dd-yyyy)")
 	if !IsValidDate(startDate) {
 		fmt.Println("Not a valid date. Please rerun and enter required format mm-dd-yyyy!")
 		return

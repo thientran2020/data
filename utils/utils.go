@@ -3,12 +3,11 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/manifoldco/promptui"
+	"github.com/AlecAivazis/survey/v2"
 )
 
 const (
@@ -32,90 +31,74 @@ const (
 
 // Different Input Types
 func ConfirmYesNoPromt(label string) bool {
-	prompt := promptui.Prompt{
-		Label:     label,
-		IsConfirm: true,
+	confirmed := false
+	prompt := &survey.Confirm{
+		Message: label,
 	}
-	_, err := prompt.Run()
-	return err == nil
+	survey.AskOne(prompt, &confirmed)
+	return confirmed
 }
 
-func InteractiveSelect(label string, items []string) (string, error) {
-	prompt := promptui.Select{
-		Label:  label,
-		Items:  items,
-		Size:   len(items),
-		Stdout: &BellSkipper{},
+func InteractiveSelect(label string, items []string) string {
+	selected := ""
+	prompt := &survey.Select{
+		Message:  label,
+		Options:  items,
+		PageSize: 14,
 	}
-	_, result, err := prompt.Run()
-
-	if err != nil {
-		return "", err
-	}
-	return result, nil
+	survey.AskOne(prompt, &selected)
+	return selected
 }
 
-func NumberEnter(label string) (int64, error) {
-	validate := func(input string) error {
-		number, err := strconv.ParseInt(input, 10, 64)
-		if err != nil {
-			return errors.New("Invalid number")
-		}
-		if number < 0 {
-			return errors.New("Negative number")
-		}
-		return nil
-	}
-
-	prompt := promptui.Prompt{
-		Label:    label,
-		Validate: validate,
-	}
-
-	stringNum, err := prompt.Run()
-	if err != nil {
-		return -1, err
-	}
-
-	result, _ := strconv.ParseInt(stringNum, 10, 64)
-	return result, nil
-}
-
-func PromptEnter(label string, empty bool) (string, error) {
-	validate := func(input string) error {
-		if len(input) == 0 && !empty {
-			return errors.New("Invalid input")
-		}
-		return nil
-	}
-
-	prompt := promptui.Prompt{
-		Label:    label,
-		Validate: validate,
-	}
-
-	result, err := prompt.Run()
-	return result, err
-}
-
-func DateEnter(label string) (string, error) {
-	validate := func(input string) error {
-		if len(input) == 0 {
+func NumberEnter(label string) int64 {
+	q := &survey.Question{
+		Prompt: &survey.Input{Message: label},
+		Validate: func(val interface{}) error {
+			strNumber, ok := val.(string)
+			number, err := strconv.ParseInt(strNumber, 10, 64)
+			if !ok || len(strNumber) == 0 || err != nil {
+				return errors.New("Please enter a valid number!")
+			}
+			if number <= 0 {
+				return errors.New("Please enter a positive number!")
+			}
 			return nil
-		}
-		if len(input) != 0 && !IsValidDate(input) {
-			return errors.New("Invalid date. Please enter with format mm-dd-yyyy...")
-		}
-		return nil
+		},
 	}
+	answer := ""
+	survey.Ask([]*survey.Question{q}, &answer)
+	numAnswer, _ := strconv.ParseInt(answer, 10, 64)
+	return numAnswer
+}
 
-	prompt := promptui.Prompt{
-		Label:    label,
-		Validate: validate,
+func PromptEnter(label string) string {
+	answer := ""
+	prompt := &survey.Input{Message: label}
+	survey.AskOne(prompt, &answer, survey.WithValidator(survey.Required))
+	return answer
+}
+
+// Return today's date by default if no input entered
+func DateEnter(label string) string {
+	q := &survey.Question{
+		Prompt: &survey.Input{Message: label},
+		Validate: func(val interface{}) error {
+			input, ok := val.(string)
+			if !ok {
+				return errors.New("Valid input required!")
+			}
+			if len(input) != 0 && !IsValidDate(input) {
+				return errors.New("Invalid date. Please enter with format mm-dd-yyyy...!")
+			}
+			return nil
+		},
 	}
-
-	result, err := prompt.Run()
-	return result, err
+	date := ""
+	survey.Ask([]*survey.Question{q}, &date)
+	if date == "" {
+		date = time.Now().Format("01-02-2006")
+	}
+	return date
 }
 
 // Print customized messages with color
@@ -243,18 +226,6 @@ func FilterSubscriptionByName(data Data, subscription string) map[string]bool {
 	return dateMap
 }
 
-// Resolve terminal's bell ring issue when moving between interactive select
-// The following implementation followed from: https://github.com/manifoldco/promptui/issues/49
-type BellSkipper struct{}
-
-func (bs *BellSkipper) Write(b []byte) (int, error) {
-	const charBell = 7
-	if len(b) == 1 && b[0] == charBell {
-		return 0, nil
-	}
-	return os.Stderr.Write(b)
-}
-
-func (bs *BellSkipper) Close() error {
-	return os.Stderr.Close()
+func CenterString(s string, width int) string {
+	return fmt.Sprintf("%[1]*s", -width, fmt.Sprintf("%[1]*s", (width+len(s))/2, s))
 }

@@ -22,10 +22,7 @@ func HandleAdd(cmd *CLI) {
 
 	// Get date - default is current date
 	var year, month, day int
-	var date string
-	if date, _ = u.DateEnter("Enter date: "); date == "" {
-		date = time.Now().Format("01-02-2006")
-	}
+	date := u.DateEnter("Enter date: ")
 	month, day, year = u.GetDateNumber(date)
 
 	// Prompt to input data
@@ -34,13 +31,13 @@ func HandleAdd(cmd *CLI) {
 	// 3. Get $$$ spent
 	// 4. Choose category
 	// 5. Convert category to code
-	ftype, _ := u.InteractiveSelect(
+	ftype := u.InteractiveSelect(
 		"What type of financial data are you entering",
 		[]string{"Income", "Expense"},
 	)
-	description, _ := u.PromptEnter(m.LABELS[ftype]["Description"], false)
-	cost, _ := u.NumberEnter(m.LABELS[ftype]["Cost"])
-	category, _ := u.InteractiveSelect(
+	description := u.PromptEnter(m.LABELS[ftype]["Description"])
+	cost := u.NumberEnter(m.LABELS[ftype]["Cost"])
+	category := u.InteractiveSelect(
 		"Pick the category that describe best your entered data",
 		m.CATEGORY,
 	)
