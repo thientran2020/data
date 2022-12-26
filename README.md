@@ -57,6 +57,7 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Merchandise
     Travel
     Personal
+		Trip
     
 ✔ Income
 +-----+-----+-----+------------------------------------+--------+-------------------+
@@ -106,6 +107,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 + `data get` (used to display more details) <br/>
 *-c* &emsp;&nbsp;display category mapping table <br/>
 *-s* &emsp;&nbsp;display current subscriptions' details <br/>
+*-t* &emsp;&nbsp;display a list of trips to select for details <br/>
 
 ```
 ➜ data get -c
@@ -148,13 +150,16 @@ SHOW FINANCIAL DATA FOR 7/2022:
 There are 2 types of csv files at `$HOME/finance` <br/>
 - `~/finance/finance.csv`: this holds all financial data. <br/>
 - `~/finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
+There are 2 json files at `$HOME/finance` <br/>
 - `~/finance/subcriptions.json`: this holds all subscription/membership data (ex: monthly rent, Costco membership,...) where all of these will be automatically updated based on their billing cycle.<br/>
+- `~/finance/trips.json`: this holds all trips data. <br/>
  
-
 ```
 ➜ ls -l ~/finance
 -rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance.csv
 -rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance_2022.csv
+-rw-rw-r--  1 ---------  staff   7850 Dec 24 19:38 subscription.json
+-rw-rw-r--  1 ---------  staff   7850 Dec 26 19:38 trip.json
 ```
 
 ### COPYRIGHT
