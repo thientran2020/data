@@ -32,13 +32,13 @@ func HandleAdd(cmd *CLI) {
 	// 4. Choose category
 	// 5. Convert category to code
 	ftype := u.InteractiveSelect(
-		"What type of financial data are you entering",
+		"What type of financial data are you entering?",
 		[]string{"Income", "Expense"},
 	)
 	description := u.PromptEnter(m.LABELS[ftype]["Description"])
 	cost := u.NumberEnter(m.LABELS[ftype]["Cost"])
 	category := u.InteractiveSelect(
-		"Pick the category that describe best your entered data",
+		"Pick the category that describe best your entered data!",
 		m.CATEGORY,
 	)
 	var code int
@@ -63,7 +63,7 @@ func HandleAdd(cmd *CLI) {
 		u.AddTripRecord(record)
 	} else {
 		u.PrintSingleRecord(record, u.Green)
-		if u.ConfirmYesNoPromt("Do you confirm to enter above record") {
+		if u.ConfirmYesNoPromt("Do you confirm to enter above record?") {
 			u.AddRecord(record)
 		} else {
 			u.PrintCustomizedMessage("Record ignored "+u.CheckMark, u.Red, true)
