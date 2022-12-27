@@ -14,10 +14,10 @@ import (
 
 func AddNewTrip() {
 	// interactive shell for information
-	tripName := PromptEnter("Where do you visit")
-	numOfParticipants := NumberEnter("How many participants are there")
-	startDate := DateEnter("When does your trip start (default is today's date)")
-	endDate := DateEnter("When does your trip end (default is today's date)")
+	tripName := PromptEnter("Where do you visit?")
+	numOfParticipants := NumberEnter("How many participants are there?")
+	startDate := DateEnter("When does your trip start (default is today's date)?")
+	endDate := DateEnter("When does your trip end (default is today's date)?")
 
 	// Create new trip, append to existing list and overwrite new file "trip.json" if existed
 	trips := ReadTripJson(GetUserHomeDirectory() + m.BASE_FILEPATH_TRIP)
@@ -32,7 +32,7 @@ func AddNewTrip() {
 	}
 
 	// Confirm record and enter to files
-	if ConfirmYesNoPromt("Do you confirm to enter above record") {
+	if ConfirmYesNoPromt("Do you confirm to enter above record?") {
 		trips = append(trips, trip)
 		WriteTripJson(GetUserHomeDirectory()+m.BASE_FILEPATH_TRIP, trips)
 	} else {
@@ -46,8 +46,8 @@ func AddTripRecord(record m.Record) {
 	for _, trip := range trips {
 		tripsList = append(tripsList, trip.Name)
 	}
-	selected := InteractiveSelect("What trip you would like to add financial data", tripsList)
-	shared := ConfirmYesNoPromt("Is it financially shared")
+	selected := InteractiveSelect("What trip you would like to add financial data?", tripsList)
+	shared := ConfirmYesNoPromt("Is it financially shared?")
 
 	for i := range trips {
 		if trips[i].Name != selected {
@@ -66,7 +66,7 @@ func AddTripRecord(record m.Record) {
 	}
 
 	PrintSingleRecord(record, Green)
-	if ConfirmYesNoPromt("Do you confirm to enter above record") {
+	if ConfirmYesNoPromt("Do you confirm to enter above record?") {
 		AddRecord(record)
 		WriteTripJson(GetUserHomeDirectory()+m.BASE_FILEPATH_TRIP, trips)
 	} else {
@@ -100,7 +100,7 @@ func PritnTrip() {
 	for _, trip := range trips {
 		tripsList = append(tripsList, trip.Name)
 	}
-	selected := InteractiveSelect("What trip you would like to add financial data", tripsList)
+	selected := InteractiveSelect("What trip you would like to add financial data?", tripsList)
 	data := String2D{}
 	for i := range trips {
 		if trips[i].Name != selected {

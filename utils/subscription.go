@@ -11,17 +11,17 @@ func AddSubscription() {
 	subscriptionList := ReadSubscriptionJson(GetUserHomeDirectory() + m.BASE_FILEPATH_SUBCRIPTION)
 
 	// Prompt user to enter neccessary information
-	name := PromptEnter("What is your new subscription/membership")
+	name := PromptEnter("What is your new subscription/membership?")
 	ftype := InteractiveSelect(
-		"What type of your subscription",
+		"What type of your subscription?",
 		[]string{"income", "expense"},
 	)
 	billingCycle := InteractiveSelect(
-		"Choose your billing cycle",
+		"Choose your billing cycle!",
 		[]string{"monthly", "yearly"},
 	)
-	cost := NumberEnter("How much per billing period")
-	startDate := PromptEnter("What was the start date (mm-dd-yyyy)")
+	cost := NumberEnter("How much per billing period?")
+	startDate := PromptEnter("What was the start date (mm-dd-yyyy)?")
 	if !IsValidDate(startDate) {
 		fmt.Println("Not a valid date. Please rerun and enter required format mm-dd-yyyy!")
 		return
@@ -46,7 +46,7 @@ func AddSubscription() {
 	// Print new subscription and ask for confirmation before adding
 	message := fmt.Sprintf("%s: $%d/%s", name, cost, strings.ToLower(billingCycle[:len(billingCycle)-2]))
 	PrintCustomizedMessage(message, Green, true)
-	confirmed := ConfirmYesNoPromt("Do you confirm to enter above subscription")
+	confirmed := ConfirmYesNoPromt("Do you confirm to enter above subscription?")
 	if confirmed {
 		WriteSubscriptionJson(GetUserHomeDirectory()+m.BASE_FILEPATH_SUBCRIPTION, subscriptionList)
 		PrintCustomizedMessage("Successfully added at "+GetUserHomeDirectory()+m.BASE_FILEPATH_SUBCRIPTION, Yellow, true)
