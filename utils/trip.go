@@ -94,20 +94,26 @@ func WriteTripJson(filepath string, trips []m.Trip) {
 	}
 }
 
-func PritnTrip() {
+func PrintTrip(onlyShared bool) {
 	trips := ReadTripJson(GetUserHomeDirectory() + m.BASE_FILEPATH_TRIP)
 	tripsList := []string{}
 	for _, trip := range trips {
 		tripsList = append(tripsList, trip.Name)
 	}
-	selected := InteractiveSelect("What trip you would like to add financial data?", tripsList)
+
+	var trip m.Trip
+	selected := InteractiveSelect("What trip you would like to display financial data?", tripsList)
 	data := String2D{}
 	for i := range trips {
 		if trips[i].Name != selected {
 			continue
 		}
+		trip = trips[i]
 		for _, record := range trips[i].Records {
 			category := record.Category
+			if onlyShared && !record.Shared {
+				continue
+			}
 			if record.Shared {
 				category += " (shared)"
 			}
@@ -143,8 +149,13 @@ func PritnTrip() {
 	}
 
 	// Display trip as table
-	intro := fmt.Sprintf("__________TRIP TO %s_________\n", strings.ToUpper(selected))
+	intro := fmt.Sprintf("__________TRIP TO %s_________\n\n   - From %s to %s", strings.ToUpper(selected), trip.StartDate, trip.EndDate)
+	summary := fmt.Sprintf("   - Total shared cost is $%d, shared by %d --> Each pays $%d\n", trip.Costs.Shared, trip.NParticipants, trip.Costs.Shared/trip.NParticipants)
+	if !onlyShared {
+		summary += fmt.Sprintf("   - Total trip cost is $%d\n", trip.Costs.Total)
+	}
 	headers := []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
 	PrintCustomizedMessage("\n"+CenterString(intro, len(m.DASH)), Red, true)
+	PrintCustomizedMessage(summary, Yellow, true)
 	PrintTable(tableData, headers, "trip", simpletable.StyleDefault)
 }
