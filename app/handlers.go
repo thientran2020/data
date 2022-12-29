@@ -115,7 +115,8 @@ func HandleShow(cmd *CLI) {
 
 func HandleGet(cmd *CLI) {
 	if cmd.Get.Trip {
-		u.PritnTrip()
+		onlyShared := u.ConfirmYesNoPromt("Would you like to display shared (Y) or all expenses (N)?")
+		u.PrintTrip(onlyShared)
 	} else if !cmd.Get.Subscription && !cmd.Get.Category {
 		fmt.Print(m.INSTRUCTION)
 	} else if cmd.Get.Category {
