@@ -3,11 +3,13 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/AlecAivazis/survey/v2/terminal"
 )
 
 const (
@@ -35,7 +37,10 @@ func ConfirmYesNoPromt(label string) bool {
 	prompt := &survey.Confirm{
 		Message: label,
 	}
-	survey.AskOne(prompt, &confirmed)
+	err := survey.AskOne(prompt, &confirmed)
+	if err == terminal.InterruptErr {
+		os.Exit(0)
+	}
 	return confirmed
 }
 
@@ -46,7 +51,10 @@ func InteractiveSelect(label string, items []string) string {
 		Options:  items,
 		PageSize: 14,
 	}
-	survey.AskOne(prompt, &selected)
+	err := survey.AskOne(prompt, &selected)
+	if err == terminal.InterruptErr {
+		os.Exit(0)
+	}
 	return selected
 }
 
@@ -74,7 +82,10 @@ func NumberEnter(label string) int64 {
 func PromptEnter(label string) string {
 	answer := ""
 	prompt := &survey.Input{Message: label}
-	survey.AskOne(prompt, &answer, survey.WithValidator(survey.Required))
+	err := survey.AskOne(prompt, &answer, survey.WithValidator(survey.Required))
+	if err == terminal.InterruptErr {
+		os.Exit(0)
+	}
 	return answer
 }
 
