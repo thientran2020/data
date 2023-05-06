@@ -6,12 +6,12 @@ var (
 	HEADERS    = []string{"#", "DATE", "DESCRIPTION", "CATEGORY", "COST"}
 	LABELS     = map[string]map[string]string{
 		"Expense": {
-			"Description": "What did you spend money for",
-			"Cost":        "Nice. How much did you spend",
+			"Description": "What did you spend money for:",
+			"Cost":        "Nice. How much did you spend:",
 		},
 		"Income": {
-			"Description": "What did you work for today",
-			"Cost":        "Awesome. How much did you earn",
+			"Description": "What did you work for today:",
+			"Cost":        "Awesome. How much did you earn:",
 		},
 	}
 
