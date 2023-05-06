@@ -20,21 +20,23 @@ func HandleAdd(cmd *CLI) {
 		return
 	}
 
+	// By default, "add" for expense
+	ftype := "Expense"
+	if cmd.Add.Income {
+		ftype = "Income"
+	}
+
 	// Get date - default is current date
 	var year, month, day int
 	date := u.DateEnter("Enter date: ")
 	month, day, year = u.GetDateNumber(date)
 
 	// Prompt to input data
-	// 1. Check data entered is for expense or income
-	// 2. Prompt enter description
-	// 3. Get $$$ spent
-	// 4. Choose category
-	// 5. Convert category to code
-	ftype := u.InteractiveSelect(
-		"What type of financial data are you entering?",
-		[]string{"Income", "Expense"},
-	)
+	// 1. Prompt enter description
+	// 2. Get $$$ spent
+	// 3. Choose category
+	// 4. Convert category to code
+
 	description := u.PromptEnter(m.LABELS[ftype]["Description"])
 	cost := u.NumberEnter(m.LABELS[ftype]["Cost"])
 	category := u.InteractiveSelect(

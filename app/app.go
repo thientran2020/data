@@ -6,6 +6,7 @@ import (
 
 type CLI struct {
 	Add struct {
+		Income       bool `optional:"" short:"i" help:"Add income"`
 		Subscription bool `optional:"" short:"s" help:"Add subscription/membership data"`
 		Trip         bool `optional:"" short:"t" help:"Add new trip"`
 	} `cmd:"" help:"Add financial data (expense or income)"`
