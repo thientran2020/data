@@ -28,25 +28,42 @@ func HandleAdd(cmd *CLI) {
 
 	// Get date - default is current date
 	var year, month, day int
-	date := u.DateEnter("Enter date: ")
+	date := time.Now().Format("01-02-2006")
+	if cmd.Add.Yesterday {
+		date = time.Now().AddDate(0, 0, -1).Format("01-02-2006")
+	} else if !cmd.Add.Today {
+		date = u.DateEnter("Enter date: ")
+	}
 	month, day, year = u.GetDateNumber(date)
 
-	// Prompt to input data
+	// Prompt to input data if no specific flags were passed
 	// 1. Prompt enter description
 	// 2. Get $$$ spent
 	// 3. Choose category
 	// 4. Convert category to code
 
-	description := u.PromptEnter(m.LABELS[ftype]["Description"])
-	cost := u.NumberEnter(m.LABELS[ftype]["Cost"])
-	category := u.InteractiveSelect(
-		"Pick the category that describe best your entered data!",
-		m.CATEGORY,
-	)
-	var code int
-	for index := range m.CATEGORY {
-		if m.CATEGORY[index] == category {
-			code = index
+	description := cmd.Add.Description
+	fmt.Printf("description = %s\n", description)
+	if description == "" {
+		description = u.PromptEnter(m.LABELS[ftype]["Description"])
+	}
+
+	cost := cmd.Add.Cost
+	if cost == 0 {
+		cost = u.NumberEnter(m.LABELS[ftype]["Cost"])
+	}
+
+	code := cmd.Add.Category
+	category := m.CATEGORY[code]
+	if (code == 0) && !(cmd.Add.Income) {
+		category := u.InteractiveSelect(
+			"Pick the category that describe best your entered data!",
+			m.CATEGORY,
+		)
+		for index := range m.CATEGORY {
+			if m.CATEGORY[index] == category {
+				code = index
+			}
 		}
 	}
 
@@ -65,7 +82,9 @@ func HandleAdd(cmd *CLI) {
 		u.AddTripRecord(record)
 	} else {
 		u.PrintSingleRecord(record, u.Green)
-		if u.ConfirmYesNoPromt("Do you confirm to enter above record?") {
+		if cmd.Add.Yes {
+			u.AddRecord(record)
+		} else if u.ConfirmYesNoPromt("Do you confirm to enter above record?") {
 			u.AddRecord(record)
 		} else {
 			u.PrintCustomizedMessage("Record ignored "+u.CheckMark, u.Red, true)
