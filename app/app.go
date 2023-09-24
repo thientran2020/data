@@ -6,9 +6,15 @@ import (
 
 type CLI struct {
 	Add struct {
-		Income       bool `optional:"" short:"i" help:"Add income"`
-		Subscription bool `optional:"" short:"s" help:"Add subscription/membership data"`
-		Trip         bool `optional:"" short:"t" help:"Add new trip"`
+		Income       bool   `optional:"" short:"i" help:"Add income"`
+		Subscription bool   `optional:"" short:"s" help:"Add subscription/membership data"`
+		Trip         bool   `optional:"" short:"t" help:"Add new trip"`
+		Today        bool   `optional:"" short:"n" help:"Set date is today"`
+		Yes          bool   `optional:"" help:"Add data without confirming yes/no"`
+		Yesterday    bool   `optional:"" short:"y" help:"Set date is yesterday"`
+		Category     int    `optional:"" short:"c" help:"Set category by code. To get list of categories, please run 'data get -c'"`
+		Cost         int64  `optional:"" help:"Expense cost"`
+		Description  string `optional:"" short:"d" help:"Set a short description for the expense/income"`
 	} `cmd:"" help:"Add financial data (expense or income)"`
 	Get struct {
 		Category     bool `optional:"" short:"c" help:"Display category mapping table"`
