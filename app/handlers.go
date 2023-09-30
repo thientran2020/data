@@ -43,7 +43,6 @@ func HandleAdd(cmd *CLI) {
 	// 4. Convert category to code
 
 	description := cmd.Add.Description
-	fmt.Printf("description = %s\n", description)
 	if description == "" {
 		description = u.PromptEnter(m.LABELS[ftype]["Description"])
 	}
@@ -78,7 +77,7 @@ func HandleAdd(cmd *CLI) {
 		Code:        code,
 	}
 
-	if record.Category == "Trip" {
+	if category == "Trip" {
 		u.AddTripRecord(record)
 	} else {
 		u.PrintSingleRecord(record, u.Green)
