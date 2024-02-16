@@ -17,7 +17,7 @@ var (
 
 	CATEGORY = []string{
 		"Income",
-		"Rent",
+		"Mortgage",
 		"Utilities",
 		"Insurance",
 		"Vehicle Services",
