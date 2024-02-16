@@ -230,7 +230,7 @@ func FilterSubscriptionByName(data Data, subscription string) map[string]bool {
 	dateMap := map[string]bool{}
 	for _, row := range data {
 		if row[2].(string) == subscription &&
-			(row[3].(string) == "Subscription" || row[3].(string) == "Rent" || row[3].(string) == "Income") {
+			(row[3].(string) == "Subscription" || row[3].(string) == "Mortgage" || row[3].(string) == "Income") {
 			dateMap[row[1].(string)] = true
 		}
 	}

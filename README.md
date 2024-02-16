@@ -46,7 +46,7 @@ Awesome. How much did you earn: 100
 Use the arrow keys to navigate: ↓ ↑ → ←
 ? Pick the category that describe best your entered data:
   ▸ Income
-    Rent
+    Mortgage
     Utilities
     Insurance
     Vehicle Services
@@ -116,7 +116,7 @@ SHOW FINANCIAL DATA FOR 7/2022:
 	|------|-----------------------------------------|
 	|  0   |  Income                                 |
 	|------|-----------------------------------------|
-	|  1   |  Rent                                   |
+	|  1   |  Mortgage                               |
 	|------|-----------------------------------------|
 	|  2   |  Ultilites (AT&T, PG&E, Water)          |
 	|------|-----------------------------------------|

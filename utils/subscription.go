@@ -89,7 +89,7 @@ func UpdateSubRecordByBCycle(data Data, subscriptions []m.Subscription, billingC
 				case "Block":
 					category = "Income"
 				case "Monthly rent":
-					category = "Rent"
+					category = "Mortgage"
 				default:
 					category = "Subscription"
 				}
