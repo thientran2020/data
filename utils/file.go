@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"sort"
 	"strconv"
@@ -110,7 +109,7 @@ func CsvRead(filepath string) (Data, String2D) {
 	reader := csv.NewReader(file)
 
 	// discard the header
-	_, err = reader.Read()
+	reader.Read()
 
 	count := 0
 	for {
@@ -142,7 +141,7 @@ func CsvRead(filepath string) (Data, String2D) {
 
 // JSON file processing
 func ReadSubscriptionJson(filepath string) m.MySubscriptionList {
-	file, err := ioutil.ReadFile(filepath)
+	file, err := os.ReadFile(filepath)
 	if err != nil {
 		CreateFile(filepath)
 		return ReadSubscriptionJson(filepath)
@@ -155,7 +154,7 @@ func ReadSubscriptionJson(filepath string) m.MySubscriptionList {
 
 func WriteSubscriptionJson(filepath string, subscriptionList m.MySubscriptionList) {
 	file, _ := json.MarshalIndent(subscriptionList, "", " ")
-	err := ioutil.WriteFile(filepath, file, 0644)
+	err := os.WriteFile(filepath, file, 0644)
 	if err != nil {
 		fmt.Printf("Error writing subscription data %v\n", err)
 	}
