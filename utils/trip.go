@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -75,7 +75,7 @@ func AddTripRecord(record m.Record) {
 }
 
 func ReadTripJson(filepath string) []m.Trip {
-	file, err := ioutil.ReadFile(filepath)
+	file, err := os.ReadFile(filepath)
 	if err != nil {
 		CreateFile(filepath)
 		return ReadTripJson(filepath)
@@ -88,7 +88,7 @@ func ReadTripJson(filepath string) []m.Trip {
 
 func WriteTripJson(filepath string, trips []m.Trip) {
 	file, _ := json.MarshalIndent(trips, "", " ")
-	err := ioutil.WriteFile(filepath, file, 0644)
+	err := os.WriteFile(filepath, file, 0644)
 	if err != nil {
 		fmt.Printf("Error writing trip data %v\n", err)
 	}
