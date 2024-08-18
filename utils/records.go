@@ -80,11 +80,11 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 				{
 					Align: simpletable.AlignRight,
 					Span:  4,
-					Text:  fmt.Sprintf("%s", Colorize("TOTAL INCOME", Red)),
+					Text:  Colorize("TOTAL INCOME", Red),
 				},
 				{
 					Align: simpletable.AlignRight,
-					Text:  fmt.Sprintf("%s", Colorize(fmt.Sprintf("%d", totalIncome), Yellow)),
+					Text:  Colorize(fmt.Sprintf("%d", totalIncome), Yellow),
 				},
 			},
 		}
@@ -94,11 +94,11 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 				{
 					Align: simpletable.AlignRight,
 					Span:  4,
-					Text:  fmt.Sprintf("%s", Colorize("TOTAL EXPENSE", Red)),
+					Text:  Colorize("TOTAL EXPENSE", Red),
 				},
 				{
 					Align: simpletable.AlignRight,
-					Text:  fmt.Sprintf("%s", Colorize(fmt.Sprintf("%d", totalExpense), White)),
+					Text:  Colorize(fmt.Sprintf("%d", totalExpense), White),
 				},
 			},
 		}
@@ -144,7 +144,7 @@ func PrintTable(data [][]interface{}, headers []string, typeFlag string, style *
 				{
 					Align: simpletable.AlignCenter,
 					Span:  4,
-					Text:  fmt.Sprintf("%s", Colorize("__________ ^o^ __________", Red)),
+					Text:  Colorize("__________ ^o^ __________", Red),
 				},
 			},
 		}

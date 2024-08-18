@@ -109,7 +109,7 @@ func CsvRead(filepath string) (Data, String2D) {
 	reader := csv.NewReader(file)
 
 	// discard the header
-	_, err = reader.Read()
+	reader.Read()
 
 	count := 0
 	for {

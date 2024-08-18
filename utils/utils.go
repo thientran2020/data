@@ -65,10 +65,10 @@ func NumberEnter(label string) int64 {
 			strNumber, ok := val.(string)
 			number, err := strconv.ParseInt(strNumber, 10, 64)
 			if !ok || len(strNumber) == 0 || err != nil {
-				return errors.New("Please enter a valid number!")
+				return errors.New("please enter a valid number")
 			}
 			if number <= 0 {
-				return errors.New("Please enter a positive number!")
+				return errors.New("please enter a positive number")
 			}
 			return nil
 		},
@@ -96,10 +96,10 @@ func DateEnter(label string) string {
 		Validate: func(val interface{}) error {
 			input, ok := val.(string)
 			if !ok {
-				return errors.New("Valid input required!")
+				return errors.New("valid input required")
 			}
 			if len(input) != 0 && !IsValidDate(input) {
-				return errors.New("Invalid date. Please enter with format mm-dd-yyyy...!")
+				return errors.New("invalid date - please enter with format mm-dd-yyyy")
 			}
 			return nil
 		},
