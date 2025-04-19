@@ -5,7 +5,8 @@ before:
     - go mod tidy
 
 builds:
-  - env:
+  - main: ./cmd/financial-cli
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
@@ -43,11 +44,11 @@ changelog:
 
 brews:
   - name: financial-cli
-    homepage: "https://github.com/thientran/financial-cli"
+    homepage: "https://github.com/thientran2020/financial-cli"
     description: "A CLI tool for financial management"
     license: "MIT"
     tap:
-      owner: thientran
+      owner: thientran2020
       name: homebrew-tap
     folder: Formula
     install: |
