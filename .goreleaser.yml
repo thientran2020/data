@@ -1,12 +1,9 @@
 # GoReleaser configuration for financial-cli
 # This file defines how the application is built and released
 
-<<<<<<< HEAD
 # Version of the configuration file
 version: 2
 
-=======
->>>>>>> 21e4956ff640a30a4cb9960244060420986148ef
 # Project name and version
 project_name: financial-cli
 version: 0.1.0
