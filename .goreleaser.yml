@@ -1,18 +1,73 @@
+# GoReleaser configuration for financial-cli
+# This file defines how the application is built and released
+
+# Version of the configuration file
+version: 2
+
+# Project name and version
+project_name: financial-cli
+version: 0.1.0
+
+# Environment variables
+env:
+  - CGO_ENABLED=0
+
+# Build configuration
 builds:
-  - binary: data
+  - main: ./cmd/financial-cli/main.go
+    env:
+      - CGO_ENABLED=0
     goos:
-      - darwin
       - linux
+      - darwin
+      - windows
     goarch:
       - amd64
       - arm64
-    goamd64:
-      - v1
-    env:
-      - CGO_ENABLED=0
-    flags:
-      - -mod=vendor
-      - -trimpath
+    ldflags:
+      - -s -w
+    mod_timestamp: '{{ .Date }}'
+
+# Archive configuration
+archives:
+  - format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+
+# Checksum configuration
+checksum:
+  name_template: 'checksums.txt'
+
+# Snapshot configuration
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+# Changelog configuration
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+      - '^release:'
+      - '^refactor:'
+      - '^style:'
+      - '^perf:'
+      - '^build:'
+      - '^revert:'
+      - '^fix:'
+      - '^feat:'
 
 release:
   prerelease: auto
@@ -30,6 +85,3 @@ brews:
     commit_author:
       name: thientran
       email: thienytran14@gmail.com
-
-checksum:
-  name_template: 'checksums.txt'
