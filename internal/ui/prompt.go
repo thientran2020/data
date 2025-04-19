@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -53,9 +54,23 @@ func (p *Prompt) AskForDate(message string) (string, error) {
 	}
 
 	var result string
-	err := survey.AskOne(prompt, &result, survey.WithValidator(validateDate))
+	err := survey.AskOne(prompt, &result)
+	if err != nil {
+		return "", err
+	}
 
-	return result, err
+	// If input is empty, return today's date
+	if result == "" {
+		now := time.Now()
+		return fmt.Sprintf("%02d-%02d-%d", int(now.Month()), now.Day(), now.Year()), nil
+	}
+
+	// Validate the date if provided
+	if err := validateDate(result); err != nil {
+		return "", err
+	}
+
+	return result, nil
 }
 
 func (p *Prompt) AskForConfirmation(message string) (bool, error) {

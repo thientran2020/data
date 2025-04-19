@@ -57,10 +57,10 @@ func (t *Table) DisplayRecords(records []*models.Record, title string) {
 	for i, rec := range records {
 		var cost string
 		if rec.IsIncome() {
-			cost = Green + fmt.Sprintf("%d", rec.Cost) + Reset
+			cost = Green + fmt.Sprintf("$%d", rec.Cost) + Reset
 			incomeTotal += rec.Cost
 		} else {
-			cost = White + fmt.Sprintf("%d", rec.Cost) + Reset
+			cost = White + fmt.Sprintf("$%d", rec.Cost) + Reset
 			expenseTotal += rec.Cost
 		}
 
@@ -73,30 +73,40 @@ func (t *Table) DisplayRecords(records []*models.Record, title string) {
 		})
 	}
 
-	table.Footer = &simpletable.Footer{
-		Cells: []*simpletable.Cell{
-			{Align: simpletable.AlignRight, Span: 4, Text: Bold + "TOTAL INCOME:" + Reset},
-			{Align: simpletable.AlignRight, Text: BoldGreen + fmt.Sprintf("$%d", incomeTotal) + Reset},
-		},
+	// Only show totals if we're not displaying a new record
+	if title != "New Record" {
+		table.Footer = &simpletable.Footer{
+			Cells: []*simpletable.Cell{
+				{Align: simpletable.AlignRight, Span: 4, Text: Bold + "TOTAL INCOME:" + Reset},
+				{Align: simpletable.AlignRight, Text: BoldGreen + fmt.Sprintf("$%d", incomeTotal) + Reset},
+			},
+		}
+
+		if title != "" {
+			fmt.Printf("\n%s%s%s:\n\n", Bold, title, Reset)
+		}
+
+		table.SetStyle(simpletable.StyleDefault)
+		fmt.Println(table.String())
+
+		// Format totals with commas and align them
+		net := incomeTotal - expenseTotal
+		netColor := BoldGreen
+		if net < 0 {
+			netColor = BoldRed
+		}
+
+		fmt.Printf("\n%-25s %s$%d%s\n", Bold+"TOTAL INCOME:"+Reset, BoldGreen, incomeTotal, Reset)
+		fmt.Printf("%-25s %s$%d%s\n", Bold+"TOTAL EXPENSE:"+Reset, BoldRed, expenseTotal, Reset)
+		fmt.Printf("%-25s %s$%d%s\n\n", Bold+"NET:"+Reset, netColor, net, Reset)
+	} else {
+		if title != "" {
+			fmt.Printf("\n%s%s%s:\n\n", Bold, title, Reset)
+		}
+
+		table.SetStyle(simpletable.StyleDefault)
+		fmt.Println(table.String())
 	}
-
-	if title != "" {
-		fmt.Printf("\n%s%s%s:\n\n", Bold, title, Reset)
-	}
-
-	table.SetStyle(simpletable.StyleDefault)
-	fmt.Println(table.String())
-
-	// Format totals with commas and align them
-	net := incomeTotal - expenseTotal
-	netColor := BoldGreen
-	if net < 0 {
-		netColor = BoldRed
-	}
-
-	fmt.Printf("\n%-25s %s$%d%s\n", Bold+"TOTAL INCOME:"+Reset, BoldGreen, incomeTotal, Reset)
-	fmt.Printf("%-25s %s$%d%s\n", Bold+"TOTAL EXPENSE:"+Reset, BoldRed, expenseTotal, Reset)
-	fmt.Printf("%-25s %s$%d%s\n\n", Bold+"NET:"+Reset, netColor, net, Reset)
 }
 
 func (t *Table) DisplayRecordsByType(records []*models.Record, recordType string, title string) {
