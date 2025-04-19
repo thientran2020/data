@@ -32,7 +32,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --rm-dist
+          args: release
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
