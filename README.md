@@ -1,6 +1,6 @@
 ## DATA - FINANCIAL CLI TOOL
 
-A great tool helps you manage your financial data ^^
+A great tool helps you manage your financial data with beautiful color-coded output ^^
 
 ### INSTALLATION
 There are 2 ways: either use `brew tap` (recommended) or clone the project with `git`. </br>
@@ -27,12 +27,30 @@ Verify if it was already installed successfully:
 ```
 git clone git@github.com:thientran2020/data.git
 cd data
-go build -o data main.go && export PATH=$(pwd):$PATH
+cd cmd/data && go build -o data main.go && export PATH=$(pwd):$PATH
 ```
+
+### FEATURES
+- Beautiful color-coded output for better readability
+  - Income amounts in green
+  - Expense amounts in red
+  - Headers in bold
+  - Net amounts color-coded based on value
+- Consistent date formatting (MM-DD-YYYY)
+- Properly aligned financial data display
+- Subscription management
+- Trip expense tracking
+- Category-based organization
 
 ### COMMANDS
 + `data add` (used to add a single record: either income or expense) <br/>
-*-s* &emsp;adding subscription
+*-s* &emsp;adding subscription <br/>
+*-t* &emsp;adding trip <br/>
+*-i* &emsp;adding income <br/>
+*-c* &emsp;specify category code <br/>
+*-d* &emsp;add description <br/>
+*-n* &emsp;set date to today <br/>
+*-y* &emsp;set date to yesterday
 
 ```
 ➜ data add
@@ -61,24 +79,9 @@ Use the arrow keys to navigate: ↓ ↑ → ←
 
 ✔ Income
 +-----+-----+-----+------------------------------------+--------+-------------------+
-|    08/07/2022   | ABC                                | $100   | Income            |
+|    12/19/2022   | ABC                                | $100   | Income            |
 +-----+-----+-----+------------------------------------+--------+-------------------+
 ? Do you confirm to enter above record? [y/N]
-
- ➜ data add -s
-Adding subscription....
-Subcription list was created at ./finance/subscription.json
-What is your new subscription/membership: Costco
-✔ Expense
-✔ Monthly
-How much per billing period: 70
-What was the start date (mm-dd-yyyy):
-
-✔ Expense
-+-----+-----+-----+------------------------------------+--------+-------------------+
-|    08/07/2022   | Costco                             | $70    | Expense           |
-+-----+-----+-----+------------------------------------+--------+-------------------+
-? Do you confirm to enter above subscription? [y/N]
 ```
 
 + `data show` (used to retrieve your financial data) <br/>
@@ -87,80 +90,59 @@ What was the start date (mm-dd-yyyy):
 *-m* &emsp;show only data filtered by specified month <br/>
 *-y* &emsp;&nbsp;show only data filtered by specified year <br/>
 *-k* &emsp;&nbsp;show only data filtered by specified keyword <br/>
+*-c* &emsp;&nbsp;show current month's records
 
 <ins>ESPECIALLY:</ins> This command will update subscriptions automatically. <br/> 
 Please run once if you see your subscriptions/memberships are not renewed yet in the financial table.
 
+Example output with color formatting:
 ```
-➜ data show -m=7 -i
-SHOW FINANCIAL DATA FOR 7/2022:
+➜ data show -m=7 -y=2024
+SHOW FINANCIAL DATA FOR 7/2024:
 
 +---+------------+-------------+----------+------+
 | # |    DATE    | DESCRIPTION | CATEGORY | COST |
 +---+------------+-------------+----------+------+
-| 1 | 07-29-2022 | ABC         | Income   |  100 |
+| 1 | 07-09-2024 | Salary      | Income   | $5000|
+| 2 | 07-15-2024 | Groceries   | Food     | $150 |
 +---+------------+-------------+----------+------+
-|                            TOTAL INCOME |  100 |
-+---+------------+-------------+----------+------+
+
+TOTAL INCOME:      $5000
+TOTAL EXPENSE:     $150
+NET:               $4850
 ```
 
-+ `data get` (used to display more details) <br/>
-*-c* &emsp;&nbsp;display category mapping table <br/>
-*-s* &emsp;&nbsp;display current subscriptions' details <br/>
-*-t* &emsp;&nbsp;display a list of trips to select for details <br/>
++ `data get` (used to retrieve category mapping or subscription details) <br/>
+*-c* &emsp;show category mapping table <br/>
+*-s* &emsp;show subscription details <br/>
+*-t* &emsp;show trip details
 
-```
-➜ data get -c
++ `data search <keyword>` (used to search records by keyword) <br/>
+Searches through descriptions and categories for the specified keyword.
 
-			CATEGORY TABLE
-	|------|-----------------------------------------|
-	|  0   |  Income                                 |
-	|------|-----------------------------------------|
-	|  1   |  Mortgage                               |
-	|------|-----------------------------------------|
-	|  2   |  Ultilites (AT&T, PG&E, Water)          |
-	|------|-----------------------------------------|
-	|  3   |  Insurance (Allstate, Medical, Dental)  |
-	|------|-----------------------------------------|
-	|  4   |  Vehicle Services                       |
-	|------|-----------------------------------------|
-	|  5   |  Fuel & Car Wash                        |
-	|------|-----------------------------------------|
-	|  6   |  Subscription & Membership              |
-	|------|-----------------------------------------|
-	|  7   |  Restaurants                            |
-	|------|-----------------------------------------|
-	|  8   |  Amazon Shopping                        |
-	|------|-----------------------------------------|
-	|  9   |  Merchandise                            |
-	|------|-----------------------------------------|
-	|  10  |  Travel                                 |
-	|------|-----------------------------------------|
-	|  11  |  Personal                               |
-	|------|-----------------------------------------|
-	|  12  |  Trip                                   |
-	|------|-----------------------------------------|
-```
+### DATA STORAGE
+All financial data is stored in JSON format under the `./finance` directory:
+- Yearly records: `./finance/YYYY.json`
+- Subscriptions: `./finance/subscription.json`
+- Trips: `./finance/trip.json`
 
-+ `data search *agrs` (used to look up data for specific keyword) <br/>
+### CATEGORIES
+The tool comes with predefined categories for better organization:
+- Income
+- Mortgage
+- Utilities
+- Insurance
+- Vehicle Services
+- Fuel - Car Wash
+- Subscription
+- Restaurants
+- Amazon Shopping
+- Merchandise
+- Travel
+- Personal
+- Trip
 
-+ `data help` (used to show general instruction) <br/>
-
-### WHERE ARE DATA SAVED?
-There are 2 types of csv files at `$HOME/finance` <br/>
-- `~/finance/finance.csv`: this holds all financial data. <br/>
-- `~/finance/finance-<year>.csv`: this holds specific-year financial data. <br/>
-There are 2 json files at `$HOME/finance` <br/>
-- `~/finance/subcriptions.json`: this holds all subscription/membership data (ex: monthly rent, Costco membership,...) where all of these will be automatically updated based on their billing cycle.<br/>
-- `~/finance/trips.json`: this holds all trips data. <br/>
- 
-```
-➜ ls -l ~/finance
--rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance.csv
--rw-rw-r--  1 ---------  staff   7850 Jul 29 19:38 finance_2022.csv
--rw-rw-r--  1 ---------  staff   7850 Dec 24 19:38 subscription.json
--rw-rw-r--  1 ---------  staff   7850 Dec 26 19:38 trip.json
-```
+You can view the complete category mapping using `data get -c`.
 
 ### COPYRIGHT
 ```
