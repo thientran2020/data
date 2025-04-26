@@ -57,10 +57,10 @@ func (t *Table) DisplayRecords(records []*models.Record, title string) {
 	for i, rec := range records {
 		var cost string
 		if rec.IsIncome() {
-			cost = Green + fmt.Sprintf("$%d", rec.Cost) + Reset
+			cost = BoldGreen + fmt.Sprintf("$%d", rec.Cost) + Reset
 			incomeTotal += rec.Cost
 		} else {
-			cost = White + fmt.Sprintf("$%d", rec.Cost) + Reset
+			cost = BoldRed + fmt.Sprintf("$%d", rec.Cost) + Reset
 			expenseTotal += rec.Cost
 		}
 
@@ -77,8 +77,8 @@ func (t *Table) DisplayRecords(records []*models.Record, title string) {
 	if title != "New Record" {
 		table.Footer = &simpletable.Footer{
 			Cells: []*simpletable.Cell{
-				{Align: simpletable.AlignRight, Span: 4, Text: Bold + "TOTAL INCOME:" + Reset},
-				{Align: simpletable.AlignRight, Text: BoldGreen + fmt.Sprintf("$%d", incomeTotal) + Reset},
+				{Align: simpletable.AlignRight, Span: 4, Text: BoldBlue + "BALANCE:" + Reset},
+				{Align: simpletable.AlignRight, Text: BoldBlue + fmt.Sprintf("$%d", incomeTotal-expenseTotal) + Reset},
 			},
 		}
 
